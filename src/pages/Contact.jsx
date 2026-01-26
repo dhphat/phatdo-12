@@ -1,5 +1,5 @@
-import React from 'react';
-import { Phone, Mail, Facebook, Instagram, Star } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { Phone, Mail, Facebook, Instagram, Star, Zap, Sparkles, Smile, Compass, MapPin } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 
 const ContactItem = ({ icon: Icon, label, value, href }) => {
@@ -32,6 +32,11 @@ const TiktokIcon = ({ size = 18 }) => (
 const Contact = () => {
     const { data: meData } = useMeData();
 
+    const HeadlineIcon = useMemo(() => {
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        return icons[Math.floor(Math.random() * icons.length)];
+    }, []);
+
     return (
         <div className="container min-h-screen py-48 md:py-64 flex flex-col justify-center">
             <div className="max-w-4xl mx-auto w-full">
@@ -39,16 +44,18 @@ const Contact = () => {
                 <div className="mb-24 animate-fade-in-up text-center">
                     <div className="flex items-center justify-center gap-2 mb-8 mx-auto opacity-50">
                         <div className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-accent-primary">
-                            <Star size={12} fill="currentColor" />
+                            <HeadlineIcon size={12} fill="currentColor" />
                         </div>
-                        <h4 className="text-accent-primary font-bold tracking-[0.4em] text-[10px] uppercase">let's talk creative</h4>
+                        <h4 className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px]">
+                            {meData?.contactHeadline || "let's talk creative"}
+                        </h4>
                     </div>
 
                     <h1 className="text-6xl md:text-8xl font-black mb-10 leading-tight tracking-tighter text-white lowercase">
                         nhau nha.
                     </h1>
-                    <p className="text-lg text-text-secondary leading-relaxed font-light max-w-lg mx-auto italic opacity-40 lowercase">
-                        mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ.
+                    <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto italic opacity-50 lowercase transition-all">
+                        {meData?.contactSubtitle || "mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ."}
                     </p>
                 </div>
 

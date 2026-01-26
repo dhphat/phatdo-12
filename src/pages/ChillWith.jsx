@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { Briefcase, Image as ImageIcon, Video, Users, ExternalLink, Play, ArrowRight } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Briefcase, Image as ImageIcon, Video, Users, ExternalLink, Play, ArrowRight, Star, Zap, Sparkles, Smile, Compass, MapPin } from 'lucide-react';
 import { useMeData, useCollection } from '../hooks/useContent';
 import { projects as staticProjects, photos as staticPhotos, clips as staticClips, crew as staticCrew } from '../data/content';
 
-const PageHeader = ({ title, subtitle }) => (
+const PageHeader = ({ title, subtitle, headline, headlineIcon: HeadlineIcon }) => (
     <div className="mb-12 md:mb-20 animate-fade-in-up text-center px-4">
+        {headline && (
+            <div className="flex items-center justify-center gap-2 mb-8 mx-auto">
+                <div className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-accent-primary">
+                    <HeadlineIcon size={12} fill="currentColor" />
+                </div>
+                <h4 className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px]">
+                    {headline}
+                </h4>
+            </div>
+        )}
         <h1 className="text-5xl md:text-8xl font-black mb-6 md:mb-8 text-white tracking-tighter lowercase leading-tight">{title}</h1>
-        <p className="text-base md:text-xl text-text-secondary max-w-3xl font-light leading-relaxed mx-auto italic opacity-60 lowercase">{subtitle}</p>
+        <p className="text-sm md:text-base text-text-secondary max-w-3xl font-light leading-relaxed mx-auto italic opacity-50 lowercase">{subtitle}</p>
     </div>
 );
 
@@ -144,12 +154,19 @@ const ChillWith = () => {
 
     const { data: remoteMeData } = useMeData();
 
+    const HeadlineIcon = useMemo(() => {
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        return icons[Math.floor(Math.random() * icons.length)];
+    }, []);
+
     const isLoading = loadingP || loadingPh || loadingC || loadingCr;
     if (isLoading && !remoteProjects.length) return null;
 
     return (
         <div className="container min-h-screen py-40 md:py-56">
             <PageHeader
+                headline={remoteMeData?.chillHeadline || "chill vibes"}
+                headlineIcon={HeadlineIcon}
                 title={remoteMeData?.chillTitle || "chill với..."}
                 subtitle={remoteMeData?.chillSubtitle || "nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình."}
             />

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm } from 'lucide-react';
+import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm, Star, Sparkles, Smile } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
 import { meData as staticMeData } from '../data/content';
@@ -60,6 +60,11 @@ const Me = () => {
             }));
     }, [meData.places]);
 
+    const HeadlineIcon = useMemo(() => {
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        return icons[Math.floor(Math.random() * icons.length)];
+    }, []);
+
     if (loading && !remoteMeData) return null;
 
     return (
@@ -68,16 +73,16 @@ const Me = () => {
                 <header className="mb-24 text-center">
                     <div className="flex items-center justify-center gap-2 mb-8 mx-auto">
                         <div className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-accent-primary">
-                            <Zap size={14} fill="currentColor" />
+                            <HeadlineIcon size={12} fill="currentColor" />
                         </div>
-                        <h4 className="text-accent-primary font-bold tracking-[0.4em] text-[11px] uppercase">
+                        <h4 className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px]">
                             {meData.headline || "creative identity"}
                         </h4>
                     </div>
                     <h1 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter text-white">
                         {meData.meTitle || "về mình."}
                     </h1>
-                    <p className="text-lg md:text-xl text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto italic opacity-60">
+                    <p className="text-sm md:text-base text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto italic opacity-50 lowercase">
                         {meData.meSubtitle || "ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo."}
                     </p>
                 </header>

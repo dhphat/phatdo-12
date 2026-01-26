@@ -207,14 +207,17 @@ const ProfileEditor = () => {
         headline: '',
         roles: [],
         homeText1: 'expert creative guidance.',
-        homeText2: 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
+        homeSubtitle: 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
         homeButtonText: 'khám phá dự án',
         homeButtonLink: '#shortcuts',
         heroImage: '/assets/hero-portrait-blue.png',
         meTitle: 'về mình.',
         meSubtitle: 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
+        chillHeadline: 'chill vibes',
         chillTitle: 'chill với...',
         chillSubtitle: 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
+        contactHeadline: "let's talk creative",
+        contactSubtitle: 'mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ.',
         ogImage: '',
         siteTitle: '',
         faviconUrl: '',
@@ -233,14 +236,17 @@ const ProfileEditor = () => {
                 headline: remoteData.headline || '',
                 roles: remoteData.roles || [],
                 homeText1: remoteData.homeText1 || 'expert creative guidance.',
-                homeText2: remoteData.homeText2 || 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
+                homeSubtitle: remoteData.homeSubtitle || remoteData.homeText2 || 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
                 homeButtonText: remoteData.homeButtonText || 'khám phá dự án',
                 homeButtonLink: remoteData.homeButtonLink || '#shortcuts',
                 heroImage: remoteData.heroImage || '/assets/hero-portrait-blue.png',
                 meTitle: remoteData.meTitle || 'về mình.',
                 meSubtitle: remoteData.meSubtitle || 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
+                chillHeadline: remoteData.chillHeadline || 'chill vibes',
                 chillTitle: remoteData.chillTitle || 'chill với...',
                 chillSubtitle: remoteData.chillSubtitle || 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
+                contactHeadline: remoteData.contactHeadline || "let's talk creative",
+                contactSubtitle: remoteData.contactSubtitle || 'mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ.',
                 ogImage: remoteData.ogImage || '',
                 siteTitle: remoteData.siteTitle || '',
                 faviconUrl: remoteData.faviconUrl || '',
@@ -274,7 +280,7 @@ const ProfileEditor = () => {
         <form onSubmit={handleSave} className="w-full max-w-2xl mx-auto space-y-10 animate-fade-in-up">
             <div className="space-y-6">
                 <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Lời chào (Headline) - Hiển thị trên cùng trang 'Về mình'</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Lời chào (Top Label) - Hiển thị trên cùng trang 'Về mình'</label>
                     <input
                         type="text"
                         value={meData.headline}
@@ -298,11 +304,12 @@ const ProfileEditor = () => {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Mô tả ngắn trang chủ</label>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Mô tả ngắn trang chủ (Subtitle)</label>
                                 <textarea
-                                    value={meData.homeText2}
-                                    onChange={(e) => setMeData({ ...meData, homeText2: e.target.value })}
+                                    value={meData.homeSubtitle}
+                                    onChange={(e) => setMeData({ ...meData, homeSubtitle: e.target.value })}
                                     className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30"
+                                    placeholder="nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with..."
                                 />
                             </div>
                         </div>
@@ -329,16 +336,31 @@ const ProfileEditor = () => {
                         <div className="space-y-6">
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Trang 'Về mình' (Tiêu đề & Mô tả)</label>
-                                <input type="text" value={meData.meTitle} onChange={e => setMeData({ ...meData, meTitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
-                                <textarea value={meData.meSubtitle} onChange={e => setMeData({ ...meData, meSubtitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                                <input type="text" value={meData.meTitle} onChange={e => setMeData({ ...meData, meTitle: e.target.value })} placeholder="về mình." className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
+                                <textarea value={meData.meSubtitle} onChange={e => setMeData({ ...meData, meSubtitle: e.target.value })} placeholder="ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo." className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
                             </div>
                         </div>
                         <div className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Trang 'Chill với' (Tiêu đề & Mô tả)</label>
-                                <input type="text" value={meData.chillTitle} onChange={e => setMeData({ ...meData, chillTitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
-                                <textarea value={meData.chillSubtitle} onChange={e => setMeData({ ...meData, chillSubtitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Trang 'Chill với' (Top Label, Tiêu đề & Mô tả)</label>
+                                <input type="text" value={meData.chillHeadline} onChange={e => setMeData({ ...meData, chillHeadline: e.target.value })} placeholder="chill vibes" className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
+                                <input type="text" value={meData.chillTitle} onChange={e => setMeData({ ...meData, chillTitle: e.target.value })} placeholder="chill với..." className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
+                                <textarea value={meData.chillSubtitle} onChange={e => setMeData({ ...meData, chillSubtitle: e.target.value })} placeholder="nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình." className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="pt-10 border-t border-white/5 space-y-8">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Trang Liên hệ (Nhau nha)</h3>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Nhãn trên cùng (Top Label)</label>
+                            <input type="text" value={meData.contactHeadline} onChange={e => setMeData({ ...meData, contactHeadline: e.target.value })} placeholder="let's talk creative" className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Mô tả phụ (Subtitle)</label>
+                            <textarea value={meData.contactSubtitle} onChange={e => setMeData({ ...meData, contactSubtitle: e.target.value })} placeholder="mình luôn sẵn sàng cho những dự án mới..." className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
                         </div>
                     </div>
                 </div>

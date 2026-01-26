@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ArrowRight, Star, Zap, Sparkles, Smile, Compass, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMeData } from '../hooks/useContent';
 
@@ -16,6 +16,11 @@ const Home = () => {
         return () => clearInterval(interval);
     }, [roles.length]);
 
+    const HeadlineIcon = useMemo(() => {
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        return icons[Math.floor(Math.random() * icons.length)];
+    }, []);
+
     if (loading) return null; // Or a subtle skeleton
 
     return (
@@ -27,17 +32,17 @@ const Home = () => {
                 <div className="w-full md:w-1/2 z-10 transition-all duration-700">
                     <div className="flex items-center gap-3 mb-8 animate-fade-in-up">
                         <div className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-accent-primary shadow-[0_0_10px_rgba(0,229,255,0.2)]">
-                            <Star size={12} fill="currentColor" />
+                            <HeadlineIcon size={12} fill="currentColor" />
                         </div>
                         <div className="h-4 flex items-center">
                             <AnimatePresence mode="wait">
                                 <motion.h4
                                     key={roles[roleIndex]}
                                     initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 0.7, y: 0 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
                                     transition={{ duration: 0.5, ease: "circOut" }}
-                                    className="text-accent-primary font-bold tracking-[0.3em] text-[10px] uppercase"
+                                    className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px]"
                                 >
                                     {roles[roleIndex]}
                                 </motion.h4>
@@ -71,14 +76,19 @@ const Home = () => {
                         )}
                     </h1>
 
-                    <p className="text-lg md:text-xl text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase italic opacity-50" style={{ animationDelay: '0.1s' }}>
-                        {meData?.homeText2?.includes('chill with...') ? (
+                    <p className="text-sm md:text-base text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase italic opacity-50" style={{ animationDelay: '0.1s' }}>
+                        {meData?.homeSubtitle?.includes('chill with...') ? (
                             <>
-                                {meData.homeText2.split('chill with...')[0]}
+                                {meData.homeSubtitle.split('chill with...')[0]}
                                 <span className="text-accent-primary">chill with...</span>
                             </>
                         ) : (
-                            meData?.homeText2 || "nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with..."
+                            meData?.homeSubtitle || (meData?.homeText2?.includes('chill with...') ? (
+                                <>
+                                    {meData.homeText2.split('chill with...')[0]}
+                                    <span className="text-accent-primary">chill with...</span>
+                                </>
+                            ) : (meData?.homeText2 || "nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with..."))
                         )}
                     </p>
 
