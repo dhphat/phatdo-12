@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { doc, setDoc, collection, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useMeData, useCollection } from '../../hooks/useContent';
-import DataMigrator from '../../components/DataMigrator';
-import { Settings, Image, Layout as LayoutIcon, LogOut, ChevronRight, Plus, Save, Trash2, Database, Upload, Link, Video as VideoIcon, Globe, MapPin, BookOpen } from 'lucide-react';
+import { Settings, Image, Layout as LayoutIcon, LogOut, ChevronRight, Plus, Save, Trash2, Upload, Link, Video as VideoIcon, Globe, MapPin, BookOpen, ArrowUp, ArrowDown } from 'lucide-react';
 
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -137,6 +136,14 @@ const PlacesListEditor = ({ items = [], onChange, label }) => {
         onChange(newItems);
     };
 
+    const moveItem = (index, direction) => {
+        const newList = [...items];
+        const newIndex = direction === 'up' ? index - 1 : index + 1;
+        if (newIndex < 0 || newIndex >= newList.length) return;
+        [newList[index], newList[newIndex]] = [newList[newIndex], newList[index]];
+        onChange(newList);
+    };
+
     return (
         <div className="space-y-4">
             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{label}</label>
@@ -165,13 +172,21 @@ const PlacesListEditor = ({ items = [], onChange, label }) => {
                             onChange={(e) => updateItem(idx, 'link', e.target.value)}
                             className="flex-grow bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:outline-none focus:border-accent-primary/30 transition-all font-sans"
                         />
-                        <button
-                            type="button"
-                            onClick={() => removeItem(idx)}
-                            className="p-3 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 transition-all border border-red-500/10 hover:text-white"
-                        >
-                            <Trash2 size={14} />
-                        </button>
+                        <div className="flex items-center gap-1 shrink-0">
+                            <button type="button" onClick={() => moveItem(idx, 'up')} disabled={idx === 0} className="p-2 text-text-secondary hover:text-accent-primary transition-colors disabled:opacity-0">
+                                <ArrowUp size={12} />
+                            </button>
+                            <button type="button" onClick={() => moveItem(idx, 'down')} disabled={idx === items.length - 1} className="p-2 text-text-secondary hover:text-accent-primary transition-colors disabled:opacity-0">
+                                <ArrowDown size={12} />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => removeItem(idx)}
+                                className="p-3 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 transition-all border border-red-500/10 hover:text-white ml-2"
+                            >
+                                <Trash2 size={14} />
+                            </button>
+                        </div>
                     </div>
                 ))}
                 <button
@@ -486,6 +501,14 @@ const BiographyEditor = () => {
         setMeData({ ...meData, [field]: newList });
     };
 
+    const moveItem = (field, index, direction) => {
+        const newList = [...meData[field]];
+        const newIndex = direction === 'up' ? index - 1 : index + 1;
+        if (newIndex < 0 || newIndex >= newList.length) return;
+        [newList[index], newList[newIndex]] = [newList[newIndex], newList[index]];
+        setMeData({ ...meData, [field]: newList });
+    };
+
     if (loading) return <div className="text-center py-20 opacity-40 italic">Đang tải...</div>;
 
     const sections = [
@@ -507,9 +530,17 @@ const BiographyEditor = () => {
                     <div className="grid gap-4">
                         {meData[section.key]?.map((item, idx) => (
                             <div key={idx} className="bg-white/5 p-6 rounded-2xl border border-white/5 space-y-4 relative group">
-                                <button type="button" onClick={() => removeItem(section.key, idx)} className="absolute top-4 right-4 p-2 text-red-400/40 hover:text-red-400 transition-colors">
-                                    <Trash2 size={14} />
-                                </button>
+                                <div className="absolute top-4 right-4 flex items-center gap-1">
+                                    <button type="button" onClick={() => moveItem(section.key, idx, 'up')} disabled={idx === 0} className="p-2 text-text-secondary hover:text-accent-primary transition-colors disabled:opacity-0">
+                                        <ArrowUp size={14} />
+                                    </button>
+                                    <button type="button" onClick={() => moveItem(section.key, idx, 'down')} disabled={idx === meData[section.key].length - 1} className="p-2 text-text-secondary hover:text-accent-primary transition-colors disabled:opacity-0">
+                                        <ArrowDown size={14} />
+                                    </button>
+                                    <button type="button" onClick={() => removeItem(section.key, idx)} className="p-2 text-red-400/40 hover:text-red-400 transition-colors ml-2">
+                                        <Trash2 size={14} />
+                                    </button>
+                                </div>
                                 <div className="grid md:grid-cols-2 gap-4">
                                     <input type="text" placeholder="Tiêu đề (VD: Cử nhân)" value={item.title} onChange={e => updateItem(section.key, idx, 'title', e.target.value)} className="bg-transparent border-b border-white/10 py-2 text-sm text-white focus:outline-none focus:border-accent-primary/50" />
                                     <input type="text" placeholder="Nơi học/làm (VD: Đại học FPT)" value={item.place} onChange={e => updateItem(section.key, idx, 'place', e.target.value)} className="bg-transparent border-b border-white/10 py-2 text-sm text-white focus:outline-none focus:border-accent-primary/50" />
@@ -850,7 +881,7 @@ const AdminDashboard = () => {
                     <SidebarItem icon={BookOpen} label="Tiểu sử & Thành tích" active={activeTab === 'biography'} onClick={() => { setActiveTab('biography'); setIsMobileMenuOpen(false); }} />
                     <SidebarItem icon={LayoutIcon} label="Dự án (Work)" active={activeTab === 'projects'} onClick={() => { setActiveTab('projects'); setIsMobileMenuOpen(false); }} />
                     <SidebarItem icon={Image} label="Media (Photos/Clips)" active={activeTab === 'media'} onClick={() => { setActiveTab('media'); setIsMobileMenuOpen(false); }} />
-                    <SidebarItem icon={Database} label="Hệ thống (Migration)" active={activeTab === 'system'} onClick={() => { setActiveTab('system'); setIsMobileMenuOpen(false); }} />
+
                 </nav>
                 <div className="p-6 border-t border-white/5 bg-[#010410]">
                     <button onClick={handleLogout} className="flex items-center gap-3 text-text-secondary hover:text-red-400 transition-colors text-[10px] font-black uppercase tracking-widest pl-2">
@@ -880,7 +911,7 @@ const AdminDashboard = () => {
                     {activeTab === 'biography' && <BiographyEditor />}
                     {activeTab === 'projects' && <ProjectsEditor />}
                     {activeTab === 'media' && <MediaEditor />}
-                    {activeTab === 'system' && <DataMigrator />}
+
                 </div>
             </main>
         </div>
