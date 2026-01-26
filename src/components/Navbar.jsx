@@ -31,7 +31,7 @@ const Navbar = () => {
                         <Link
                             key={link.path}
                             to={link.path}
-                            className={`nav-link rounded-full lowercase active:scale-95 transition-all ${location.pathname === link.path ? 'active bg-white/5' : ''}`}
+                            className={`nav-link rounded-full active:scale-95 transition-all ${location.pathname === link.path ? 'active bg-white/5' : ''}`}
                         >
                             {link.label}
                         </Link>
@@ -55,7 +55,7 @@ const Navbar = () => {
                             key={link.path}
                             to={link.path}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`text-4xl font-black lowercase tracking-tighter active:scale-95 transition-all animate-fade-in-up ${location.pathname === link.path ? 'text-accent-primary' : 'text-text-secondary/60 hover:text-white'}`}
+                            className={`text-4xl font-black tracking-tighter active:scale-95 transition-all animate-fade-in-up ${location.pathname === link.path ? 'text-accent-primary' : 'text-text-secondary/60 hover:text-white'}`}
                             style={{ animationDelay: `${idx * 0.1}s` }}
                         >
                             {link.label}

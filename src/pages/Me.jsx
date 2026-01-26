@@ -82,7 +82,7 @@ const Me = () => {
                     <h1 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter text-white">
                         {meData.meTitle || "về mình."}
                     </h1>
-                    <p className="text-sm md:text-base text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto opacity-70 lowercase">
+                    <p className="text-sm md:text-base text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto opacity-70">
                         {meData.meSubtitle || "ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo."}
                     </p>
                 </header>

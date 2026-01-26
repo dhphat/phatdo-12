@@ -51,10 +51,10 @@ const Contact = () => {
                         </h4>
                     </div>
 
-                    <h1 className="text-6xl md:text-8xl font-black mb-10 leading-tight tracking-tighter text-white lowercase">
+                    <h1 className="text-6xl md:text-8xl font-black mb-10 leading-tight tracking-tighter text-white">
                         nhau nha
                     </h1>
-                    <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto opacity-70 lowercase transition-all">
+                    <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto opacity-70 transition-all">
                         {meData?.contactSubtitle || "mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ."}
                     </p>
                 </div>

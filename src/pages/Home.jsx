@@ -50,7 +50,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 leading-[0.9] tracking-tighter animate-fade-in-up text-white lowercase">
+                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 leading-[0.9] tracking-tighter animate-fade-in-up text-white">
                         {meData?.homeText1 ? (
                             meData.homeText1.split('\n').map((line, i) => (
                                 <React.Fragment key={i}>
@@ -76,7 +76,7 @@ const Home = () => {
                         )}
                     </h1>
 
-                    <p className="text-sm md:text-base text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase opacity-70" style={{ animationDelay: '0.1s' }}>
+                    <p className="text-sm md:text-base text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light opacity-70" style={{ animationDelay: '0.1s' }}>
                         {meData?.homeSubtitle?.includes('chill with...') ? (
                             <>
                                 {meData.homeSubtitle.split('chill with...')[0]}
