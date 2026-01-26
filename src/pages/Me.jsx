@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, PalmTree } from 'lucide-react';
+import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
 import { meData as staticMeData } from '../data/content';
@@ -113,7 +113,7 @@ const Me = () => {
 
                     <div className="flex flex-wrap gap-4 md:gap-6">
                         {React.useMemo(() => {
-                            const iconsList = [Globe, MapPin, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, PalmTree];
+                            const iconsList = [Globe, MapPin, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm];
                             return [...(meData.places || [])]
                                 .sort(() => Math.random() - 0.5)
                                 .map((place, idx) => {
