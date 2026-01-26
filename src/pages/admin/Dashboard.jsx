@@ -19,7 +19,7 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
     </button>
 );
 
-const ImageUpload = ({ onUpload, label, currentImage, multiple = false }) => {
+const ImageUpload = ({ onUpload, onRemove, label, currentImage, multiple = false }) => {
     const [uploading, setUploading] = useState(false);
 
     const handleFileChange = async (e) => {
@@ -52,15 +52,35 @@ const ImageUpload = ({ onUpload, label, currentImage, multiple = false }) => {
             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{label}</label>
             <div className="flex flex-col gap-4">
                 {currentImage && !multiple && (
-                    <div className="w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+                    <div className="relative group/img w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
                         <img src={currentImage} alt="Preview" className="w-full h-full object-cover" />
+                        {onRemove && (
+                            <button
+                                type="button"
+                                onClick={() => onRemove(currentImage)}
+                                className="absolute top-1 right-1 p-1 bg-red-500 rounded-full text-white opacity-0 group-hover/img:opacity-100 transition-opacity shadow-lg"
+                                title="Xóa ảnh"
+                            >
+                                <Trash2 size={12} />
+                            </button>
+                        )}
                     </div>
                 )}
                 {multiple && Array.isArray(currentImage) && currentImage.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {currentImage.map((url, i) => (
-                            <div key={i} className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                            <div key={i} className="relative group/img w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-white/5">
                                 <img src={url} alt="Preview" className="w-full h-full object-cover" />
+                                {onRemove && (
+                                    <button
+                                        type="button"
+                                        onClick={() => onRemove(url)}
+                                        className="absolute top-1 right-1 p-1 bg-red-500 rounded-full text-white opacity-0 group-hover/img:opacity-100 transition-opacity shadow-lg"
+                                        title="Xóa ảnh"
+                                    >
+                                        <Trash2 size={10} />
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -325,6 +345,7 @@ const ProfileEditor = () => {
                                 label="Hình nền trang chủ (Hero)"
                                 currentImage={meData.heroImage}
                                 onUpload={(url) => setMeData({ ...meData, heroImage: url })}
+                                onRemove={() => setMeData({ ...meData, heroImage: '' })}
                             />
                         </div>
                     </div>
@@ -376,6 +397,7 @@ const ProfileEditor = () => {
                                 label="Ảnh Thumbnail Website (OG Image)"
                                 currentImage={meData.ogImage}
                                 onUpload={(url) => setMeData({ ...meData, ogImage: url })}
+                                onRemove={() => setMeData({ ...meData, ogImage: '' })}
                             />
                         </div>
                         <div className="space-y-6">
@@ -393,6 +415,7 @@ const ProfileEditor = () => {
                                 label="Biểu tượng Website (Favicon)"
                                 currentImage={meData.faviconUrl}
                                 onUpload={(url) => setMeData({ ...meData, faviconUrl: url })}
+                                onRemove={() => setMeData({ ...meData, faviconUrl: '' })}
                             />
                         </div>
                     </div>
@@ -694,6 +717,7 @@ const ProjectsEditor = () => {
                                 label="Logo dự án"
                                 currentImage={editing.logo}
                                 onUpload={(url) => setEditing({ ...editing, logo: url })}
+                                onRemove={() => setEditing({ ...editing, logo: '' })}
                             />
                         </div>
                         <div className="space-y-2">
@@ -702,6 +726,7 @@ const ProjectsEditor = () => {
                                 multiple={true}
                                 currentImage={editing.images}
                                 onUpload={(urls) => setEditing({ ...editing, images: [...(editing.images || []), ...urls] })}
+                                onRemove={(url) => setEditing({ ...editing, images: editing.images.filter(img => img !== url) })}
                             />
                         </div>
                         <div className="space-y-2">
@@ -870,6 +895,7 @@ const MediaEditor = () => {
                                 label="Logo tổ chức (Crew)"
                                 currentImage={editing.logo}
                                 onUpload={(url) => setEditing({ ...editing, logo: url })}
+                                onRemove={() => setEditing({ ...editing, logo: '' })}
                             />
                         </div>
                     )}
@@ -880,6 +906,7 @@ const MediaEditor = () => {
                                 multiple={true}
                                 currentImage={editing.images}
                                 onUpload={(urls) => setEditing({ ...editing, images: [...(editing.images || []), ...urls] })}
+                                onRemove={(url) => setEditing({ ...editing, images: (editing.images || []).filter(img => img !== url) })}
                             />
                         </div>
                     )}
