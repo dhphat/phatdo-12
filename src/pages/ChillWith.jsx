@@ -261,8 +261,8 @@ const ClipItem = ({ item }) => {
                 <div>
                     <span className="text-accent-secondary font-black uppercase tracking-[0.4em] text-[8px] mb-1 block opacity-60">/ {item.role}</span>
                     <h3 className="text-xl font-black text-white mb-2 tracking-tighter">{item.title}</h3>
-                    <p className="text-xs text-text-secondary leading-relaxed font-light mb-4 opacity-60">{item.description}</p>
-                    <div className="flex gap-2">
+                    <p className="text-xs text-text-secondary leading-relaxed font-light mb-4 opacity-60 whitespace-pre-wrap">{item.description}</p>
+                    <div className="flex flex-wrap gap-2">
                         {item.otherLinks?.map((link, idx) => (
                             <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-[7px] text-text-secondary hover:text-accent-primary active:scale-95 transition-all uppercase font-black tracking-widest px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/5">
                                 {link.name} <ExternalLink size={8} />
@@ -279,20 +279,30 @@ const CrewItem = ({ item, onImageClick }) => {
     const [ref, isVisible] = useIntersectionObserver();
 
     return (
-        <div ref={ref} className={`glass-panel p-6 rounded-[1.5rem] border transition-all duration-700 animate-fade-in-up ${isVisible ? 'border-accent-primary/20 shadow-[0_0_30px_rgba(0,229,255,0.05)]' : 'border-white/5'}`}>
-            <div className="mb-6">
-                <span className="text-accent-secondary font-black uppercase tracking-[0.4em] text-[8px] mb-1 block opacity-60">/ {item.role}</span>
-                <h3 className="text-2xl font-black text-white mb-2 tracking-tighter text-center lg:text-left">{item.organization}</h3>
-                <p className="text-sm text-text-secondary leading-relaxed font-light mb-5 opacity-80">{item.description}</p>
-                <div className="flex gap-2 justify-center lg:justify-start">
-                    {item.otherLinks?.map((link, idx) => (
-                        <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-[8px] text-accent-primary hover:text-white active:scale-95 transition-all uppercase font-black tracking-widest px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">
-                            {link.name} <ArrowRight size={10} />
-                        </a>
-                    ))}
+        <div ref={ref} className={`glass-panel p-6 md:p-8 rounded-[1.5rem] border transition-all duration-700 animate-fade-in-up ${isVisible ? 'border-accent-primary/20 shadow-[0_0_30px_rgba(0,229,255,0.05)]' : 'border-white/5'}`}>
+            <div className="flex flex-col lg:flex-row gap-8">
+                {item.logo && (
+                    <div className="lg:w-1/4">
+                        <div className={`aspect-square rounded-xl overflow-hidden bg-white/5 flex items-center justify-center p-6 border border-white/5 mb-4 group ring-1 ring-white/10 max-w-[80px] lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ${isVisible ? 'grayscale-0 scale-105' : 'grayscale'}`}>
+                            <img src={item.logo} alt={item.organization} className="w-full h-full object-contain" />
+                        </div>
+                    </div>
+                )}
+
+                <div className={item.logo ? "lg:w-3/4" : "w-full"}>
+                    <span className="text-accent-secondary font-black uppercase tracking-[0.4em] text-[8px] mb-1 block opacity-60">/ {item.role}</span>
+                    <h3 className="text-2xl font-black text-white mb-2 tracking-tighter">{item.organization}</h3>
+                    <p className="text-sm text-text-secondary leading-relaxed font-light mb-5 opacity-80 whitespace-pre-wrap">{item.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {item.otherLinks?.map((link, idx) => (
+                            <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-[8px] text-accent-primary hover:text-white active:scale-95 transition-all uppercase font-black tracking-widest px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">
+                                {link.name} <ArrowRight size={10} />
+                            </a>
+                        ))}
+                    </div>
+                    {item.images && <MediaGrid images={item.images} isActive={isVisible} onImageClick={onImageClick} />}
                 </div>
             </div>
-            {item.images && <MediaGrid images={item.images} isActive={isVisible} onImageClick={onImageClick} />}
         </div>
     );
 };

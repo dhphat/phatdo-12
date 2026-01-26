@@ -864,19 +864,22 @@ const MediaEditor = () => {
                         <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{subTab === 'visual' ? 'Loại (Type)' : 'Vai trò (Role)'}</label>
                         <input type="text" value={editing.type || editing.role || ''} onChange={e => setEditing(subTab === 'visual' ? { ...editing, type: e.target.value } : { ...editing, role: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
                     </div>
+                    {subTab === 'crew' && (
+                        <div className="space-y-2">
+                            <ImageUpload
+                                label="Logo tổ chức (Crew)"
+                                currentImage={editing.logo}
+                                onUpload={(url) => setEditing({ ...editing, logo: url })}
+                            />
+                        </div>
+                    )}
                     {(subTab === 'visual' || subTab === 'crew') && (
                         <div className="space-y-2">
                             <ImageUpload
-                                label={subTab === 'visual' ? "Hình ảnh" : "Hình ảnh Crew"}
-                                multiple={subTab === 'visual'}
-                                currentImage={subTab === 'visual' ? editing.images : editing.images?.[0]}
-                                onUpload={(url_or_urls) => {
-                                    if (subTab === 'visual') {
-                                        setEditing({ ...editing, images: [...(editing.images || []), ...url_or_urls] });
-                                    } else {
-                                        setEditing({ ...editing, images: [url_or_urls] });
-                                    }
-                                }}
+                                label={subTab === 'visual' ? "Hình ảnh" : "Hình ảnh Crew (Tải nhiều)"}
+                                multiple={true}
+                                currentImage={editing.images}
+                                onUpload={(urls) => setEditing({ ...editing, images: [...(editing.images || []), ...urls] })}
                             />
                         </div>
                     )}
@@ -884,6 +887,12 @@ const MediaEditor = () => {
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Video URL (Embed/Youtube)</label>
                             <input type="text" value={editing.videoUrl || ''} onChange={e => setEditing({ ...editing, videoUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 font-sans" />
+                        </div>
+                    )}
+                    {(subTab === 'crew' || subTab === 'clip') && (
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Mô tả ({subTab})</label>
+                            <textarea value={editing.description || ''} onChange={e => setEditing({ ...editing, description: e.target.value })} rows={4} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 font-light" />
                         </div>
                     )}
                     <div className="pt-4 border-t border-white/5">
@@ -926,8 +935,15 @@ const MediaEditor = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {items?.map(item => (
                     <div key={item.id} className="glass-panel group relative rounded-2xl overflow-hidden border-white/5 hover:border-accent-primary/20 transition-all aspect-[4/5]">
-                        {(item.image || item.images?.length > 0) && (
-                            <img src={item.image || item.images[0]} alt="" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                        <div className="absolute inset-0">
+                            {(item.image || item.images?.length > 0) && (
+                                <img src={item.image || item.images[0]} alt="" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                            )}
+                        </div>
+                        {subTab === 'crew' && item.logo && (
+                            <div className="absolute top-4 left-4 w-10 h-10 rounded-lg bg-white/10 backdrop-blur-md p-2 border border-white/10 z-10">
+                                <img src={item.logo} alt="" className="w-full h-full object-contain" />
+                            </div>
                         )}
                         <div className="absolute inset-0 p-6 flex flex-col justify-end bg-gradient-to-t from-bg-primary">
                             <h4 className="font-bold text-white leading-tight mb-1">{item.title || item.organization}</h4>
