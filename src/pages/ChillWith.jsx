@@ -124,7 +124,7 @@ const ClipItem = ({ item }) => (
 const CrewItem = ({ item }) => (
     <div className="glass-panel p-8 rounded-[2rem] border border-white/5 animate-fade-in-up">
         <div className="mb-6">
-            <span className="text-accent-secondary font-black uppercase tracking-[0.4em] text-[9px] mb-2 block opacity-60 italic">/ {item.role}</span>
+            <span className="text-accent-secondary font-black uppercase tracking-[0.4em] text-[9px] mb-2 block opacity-60">/ {item.role}</span>
             <h3 className="text-3xl font-black text-white mb-3 tracking-tighter lowercase">{item.organization}</h3>
             <p className="text-base text-text-secondary leading-relaxed font-light mb-6 lowercase opacity-80">{item.description}</p>
             <div className="flex gap-3">
