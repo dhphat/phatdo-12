@@ -160,7 +160,8 @@ const ProfileEditor = () => {
                 meTitle: remoteData.meTitle || 'về mình.',
                 meSubtitle: remoteData.meSubtitle || 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
                 chillTitle: remoteData.chillTitle || 'chill với...',
-                chillSubtitle: remoteData.chillSubtitle || 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.'
+                chillSubtitle: remoteData.chillSubtitle || 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
+                ogImage: remoteData.ogImage || '/assets/hero-portrait-blue.png'
             });
         }
     }, [remoteData]);
@@ -249,6 +250,22 @@ const ProfileEditor = () => {
                                 <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Trang 'Chill với' (Tiêu đề & Mô tả)</label>
                                 <input type="text" value={meData.chillTitle} onChange={e => setMeData({ ...meData, chillTitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
                                 <textarea value={meData.chillSubtitle} onChange={e => setMeData({ ...meData, chillSubtitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-10 border-t border-white/5 space-y-8">
+                        <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cấu hình SEO & Chia sẻ</h3>
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="space-y-6">
+                                <p className="text-[10px] text-text-secondary leading-relaxed opacity-60">
+                                    Hình ảnh này sẽ hiển thị khi bạn chia sẻ link website lên Facebook, Zalo, iMessage... Nên dùng ảnh có tỉ lệ 1200x630px để hiển thị đẹp nhất.
+                                </p>
+                                <ImageUpload
+                                    label="Ảnh Thumbnail Website (OG Image)"
+                                    currentImage={meData.ogImage}
+                                    onUpload={(url) => setMeData({ ...meData, ogImage: url })}
+                                />
                             </div>
                         </div>
                     </div>
