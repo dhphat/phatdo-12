@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, Facebook, Instagram, Star, Zap } from 'lucide-react';
+import { Phone, Mail, Facebook, Instagram, Star } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 
 const ContactItem = ({ icon: Icon, label, value, href }) => {
@@ -16,6 +16,20 @@ const ContactItem = ({ icon: Icon, label, value, href }) => {
         </a>
     );
 };
+
+const ThreadsIcon = ({ size = 18 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 12c0-3 2.5-5.5 5.5-5.5S23 9 23 12s-2.5 5.5-5.5 5.5c-1.5 0-3-.5-4-1.5" />
+        <path d="M12 12c0 3-2.5 5.5-5.5 5.5S1 15 1 12s2.5-5.5 5.5-5.5C8 6.5 9.5 7 10.5 8" />
+        <path d="M12 12V8" />
+    </svg>
+);
+
+const TiktokIcon = ({ size = 18 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+    </svg>
+);
 
 const Contact = () => {
     const { data: meData } = useMeData();
@@ -46,8 +60,8 @@ const Contact = () => {
                     <ContactItem icon={Mail} label="Email" value={meData?.email} href={`mailto:${meData?.email}`} />
                     <ContactItem icon={Facebook} label="Facebook" value="Đỗ Hữu Phát" href={meData?.facebook} />
                     <ContactItem icon={Instagram} label="Instagram" value="@phatdo.hp" href={meData?.instagram} />
-                    <ContactItem icon={Zap} label="Threads" value="@phatdo.hp" href={meData?.threads} />
-                    <ContactItem icon={Zap} label="TikTok" value="@phatdo.hp" href={meData?.tiktok} />
+                    <ContactItem icon={ThreadsIcon} label="Threads" value="@phatdo.hp" href={meData?.threads} />
+                    <ContactItem icon={TiktokIcon} label="TikTok" value="@phatdo.hp" href={meData?.tiktok} />
                 </div>
             </div>
         </div>
