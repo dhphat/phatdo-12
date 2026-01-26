@@ -18,7 +18,7 @@ function App() {
           <Route path="/chill-voi" element={<ChillWith />} />
           <Route path="/nhau-nha" element={<Contact />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/*" element={<AdminDashboard />} />
         </Routes>
       </Layout>
     </Router>

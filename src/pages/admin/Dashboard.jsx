@@ -467,15 +467,21 @@ const AdminDashboard = () => {
     };
 
     useEffect(() => {
-        // Use auth.currentUser as a synchronous check alongside the hook state
+        console.log("AdminDashboard mounted. Auth State:", {
+            isLoading: loadingAuth,
+            hasUser: !!user,
+            hasAuthCurrentUser: !!auth.currentUser
+        });
+
         if (!loadingAuth && !user && !auth.currentUser) {
+            console.log("Redirecting to login...");
             navigate('/admin/login');
         }
     }, [user, loadingAuth, navigate]);
 
-    if (loadingAuth || (!user && !loadingAuth && !auth.currentUser)) {
+    if (loadingAuth) {
         return (
-            <div className="fixed inset-0 min-h-screen flex items-center justify-center bg-bg-primary z-[9999]">
+            <div className="fixed inset-0 min-h-screen flex items-center justify-center bg-[#020617] z-[9999]">
                 <div className="flex flex-col items-center gap-6 text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-primary"></div>
                     <div className="space-y-2">
@@ -487,22 +493,26 @@ const AdminDashboard = () => {
         );
     }
 
+    if (!user && !auth.currentUser) {
+        return null; // Will be handled by useEffect redirect
+    }
+
     return (
         <div className="flex min-h-screen bg-[#020617] text-white cursor-auto relative">
             {/* Sidebar */}
-            <aside className="w-64 border-r border-white/5 bg-[#010410] flex flex-col sticky top-0 h-screen">
+            <aside className="w-64 border-r border-white/5 bg-[#010410] flex flex-col sticky top-0 h-screen z-50">
                 <div className="p-8 mb-4">
                     <h1 className="text-xl font-black text-white tracking-widest uppercase">Aura CMS</h1>
                     <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1 italic">phatdo.com</p>
                 </div>
-                <nav className="flex-grow">
+                <nav className="flex-grow overflow-y-auto">
                     <SidebarItem icon={Settings} label="Hồ sơ & Chức danh" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
                     <SidebarItem icon={BookOpen} label="Tiểu sử & Thành tích" active={activeTab === 'biography'} onClick={() => setActiveTab('biography')} />
                     <SidebarItem icon={LayoutIcon} label="Dự án (Work)" active={activeTab === 'projects'} onClick={() => setActiveTab('projects')} />
                     <SidebarItem icon={Image} label="Media (Photos/Clips)" active={activeTab === 'media'} onClick={() => setActiveTab('media')} />
                     <SidebarItem icon={Database} label="Hệ thống (Migration)" active={activeTab === 'system'} onClick={() => setActiveTab('system')} />
                 </nav>
-                <div className="p-6 border-t border-white/5">
+                <div className="p-6 border-t border-white/5 bg-[#010410]">
                     <button onClick={handleLogout} className="flex items-center gap-3 text-text-secondary hover:text-red-400 transition-colors text-xs font-bold uppercase tracking-widest pl-2">
                         <LogOut size={16} /> Đăng xuất
                     </button>
@@ -510,7 +520,7 @@ const AdminDashboard = () => {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-grow p-12 overflow-y-auto">
+            <main className="flex-grow p-12 overflow-y-auto relative z-10">
                 <header className="mb-12 flex justify-between items-center text-white">
                     <div>
                         <h2 className="text-4xl font-black tracking-tighter capitalize">{activeTab}</h2>
@@ -520,7 +530,7 @@ const AdminDashboard = () => {
                     </div>
                 </header>
 
-                <div className="glass-panel p-10 rounded-[2.5rem] border-white/5 shadow-2xl min-h-[600px] flex flex-col">
+                <div className="bg-[#0A192F]/50 border border-white/5 p-10 rounded-[2.5rem] shadow-2xl min-h-[600px] flex flex-col items-stretch">
                     {activeTab === 'profile' && <ProfileEditor />}
                     {activeTab === 'biography' && <BiographyEditor />}
                     {activeTab === 'projects' && <ProjectsEditor />}
