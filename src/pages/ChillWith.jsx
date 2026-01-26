@@ -37,7 +37,7 @@ const MediaGrid = ({ images }) => (
     <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
         {images?.map((img, idx) => (
             <div key={idx} className="aspect-square rounded-xl overflow-hidden border border-white/5 group/img">
-                <img src={img} alt="" className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-1000 group-hover/img:scale-110" />
+                <img src={img} alt="" className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 active:grayscale-0 transition-all duration-1000 group-hover/img:scale-110 active:scale-110" />
             </div>
         ))}
     </div>
@@ -48,7 +48,7 @@ const ProjectItem = ({ item }) => (
         <div className="flex flex-col lg:flex-row gap-10">
             <div className="lg:w-1/4">
                 <div className="aspect-square rounded-2xl overflow-hidden bg-white/5 flex items-center justify-center p-6 border border-white/5 mb-4 group ring-1 ring-white/10 max-w-[140px] lg:max-w-none mx-auto lg:mx-0">
-                    <img src={item.logo} alt={item.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                    <img src={item.logo} alt={item.title} className="w-full h-full object-contain group-hover:scale-105 active:scale-105 transition-transform duration-500" />
                 </div>
                 <div className="space-y-4 text-center lg:text-left">
                     {item.websiteUrl && (
@@ -73,7 +73,7 @@ const ProjectItem = ({ item }) => (
 
                 {item.videoUrl && (
                     <div className="aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5 mb-6 group">
-                        <iframe src={item.videoUrl} className="w-full h-full opacity-40 group-hover:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0" />
+                        <iframe src={item.videoUrl} title={item.title} className="w-full h-full opacity-40 group-hover:opacity-100 active:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0 active:grayscale-0" />
                     </div>
                 )}
                 {item.images && <MediaGrid images={item.images} />}
@@ -85,7 +85,7 @@ const ProjectItem = ({ item }) => (
 const VisualItem = ({ item }) => (
     <div className="group animate-fade-in-up">
         <div className="aspect-[4/5] overflow-hidden rounded-[1.5rem] border border-white/5 mb-4">
-            <img src={item.image || (item.images && item.images[0])} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+            <img src={item.image || (item.images && item.images[0])} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 active:grayscale-0 transition-all duration-1000 group-hover:scale-110 active:scale-110" />
         </div>
         <div>
             <span className="text-accent-primary font-black text-[9px] uppercase tracking-[0.3em] mb-1 block">/ {item.type}</span>
@@ -98,7 +98,7 @@ const ClipItem = ({ item }) => (
     <div className="glass-panel p-8 rounded-[2rem] border border-white/5 animate-fade-in-up">
         <div className="flex flex-col gap-6">
             <div className="aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5 group relative">
-                <iframe src={item.videoUrl} className="w-full h-full opacity-40 group-hover:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0" />
+                <iframe src={item.videoUrl} title={item.title} className="w-full h-full opacity-40 group-hover:opacity-100 active:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0 active:grayscale-0" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity">
                     <div className="w-16 h-16 rounded-full bg-accent-primary/20 backdrop-blur-sm flex items-center justify-center text-accent-primary">
                         <Play size={24} fill="currentColor" />

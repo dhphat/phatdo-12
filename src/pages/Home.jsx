@@ -106,7 +106,7 @@ const Home = () => {
                         <img
                             src={meData?.heroImage || "/assets/hero-portrait-blue.png"}
                             alt="Phat Do"
-                            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                            className="w-full h-full object-cover grayscale hover:grayscale-0 active:grayscale-0 transition-all duration-1000 group-hover:scale-105 active:scale-105"
                         />
 
                         {/* Minimal Gradient for depth */}

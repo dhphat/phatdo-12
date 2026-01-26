@@ -26,7 +26,7 @@ const Navbar = () => {
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'py-4 bg-bg-primary/40 backdrop-blur-xl' : 'py-8 bg-transparent'}`}>
             <div className="container flex items-center justify-center">
                 {/* Centered Navigation without Brand Logo */}
-                <div className="flex items-center glass-panel rounded-full px-2 py-1 border-white/5 shadow-2xl">
+                <div className="flex items-center glass-panel rounded-full px-2 py-1 border-white/5 shadow-2xl max-[400px]:hidden">
                     {navLinks.map((link) => (
                         <Link
                             key={link.path}
@@ -38,8 +38,8 @@ const Navbar = () => {
                     ))}
                 </div>
 
-                {/* Mobile Toggle (only visible on mobile if needed, but keeping it clean) */}
-                <button className="md:hidden absolute right-6 text-text-primary mt-1" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                {/* Mobile Toggle (only visible on exceptionally narrow screens) */}
+                <button className="max-[400px]:flex hidden md:hidden absolute right-6 text-text-primary mt-1 items-center justify-center w-10 h-10 rounded-full glass-panel" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                     {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
             </div>
