@@ -14,8 +14,6 @@ import './App.css';
 function App() {
   const { data: meData, loading } = useMeData();
 
-  if (loading) return <LoadingScreen />;
-
   useEffect(() => {
     if (meData?.siteTitle) {
       document.title = meData.siteTitle;
@@ -27,6 +25,8 @@ function App() {
       }
     }
   }, [meData]);
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <Router>
