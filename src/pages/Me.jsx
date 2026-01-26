@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
@@ -49,6 +49,16 @@ const AwardItem = ({ title, place, period, description, link }) => (
 const Me = () => {
     const { data: remoteMeData, loading } = useMeData();
     const meData = remoteMeData || staticMeData;
+
+    const randomizedPlaces = useMemo(() => {
+        const iconsList = [Globe, MapPin, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm];
+        return [...(meData.places || [])]
+            .sort(() => Math.random() - 0.5)
+            .map((place) => ({
+                ...place,
+                RandomIcon: iconsList[Math.floor(Math.random() * iconsList.length)]
+            }));
+    }, [meData.places]);
 
     if (loading && !remoteMeData) return null;
 
@@ -112,42 +122,34 @@ const Me = () => {
                     <h2 className="text-2xl font-black mb-12 text-white uppercase italic tracking-widest text-[13px] opacity-40">đã từng ghé qua</h2>
 
                     <div className="flex flex-wrap gap-4 md:gap-6">
-                        {React.useMemo(() => {
-                            const iconsList = [Globe, MapPin, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm];
-                            return [...(meData.places || [])]
-                                .sort(() => Math.random() - 0.5)
-                                .map((place, idx) => {
-                                    const RandomIcon = iconsList[Math.floor(Math.random() * iconsList.length)];
-                                    return (
-                                        <a
-                                            key={idx}
-                                            href={place.link || '#'}
-                                            target={place.link ? "_blank" : undefined}
-                                            rel={place.link ? "noopener noreferrer" : undefined}
-                                            className={`
-                                                group relative overflow-hidden px-6 py-4 rounded-2xl border transition-all duration-500
-                                                ${place.type === 'intl'
-                                                    ? 'bg-accent-primary/20 border-accent-primary/30 text-accent-primary hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary scale-110 z-10'
-                                                    : 'bg-white/[0.08] border-white/10 text-text-secondary hover:text-white hover:border-white/30 hover:bg-white/10'
-                                                }
-                                                ${place.link ? 'cursor-pointer' : 'cursor-default'}
-                                            `}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <RandomIcon size={place.type === 'intl' ? 16 : 14} className={place.type === 'intl' ? 'opacity-80' : 'opacity-50'} />
-                                                <span className={`text-[11px] font-black uppercase tracking-widest ${place.type === 'intl' ? 'tracking-[0.2em]' : ''}`}>
-                                                    {place.name}
-                                                </span>
-                                            </div>
-                                            {place.link && (
-                                                <div className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <Zap size={8} fill="currentColor" className="text-accent-secondary" />
-                                                </div>
-                                            )}
-                                        </a>
-                                    );
-                                });
-                        }, [meData.places])}
+                        {randomizedPlaces.map((place, idx) => (
+                            <a
+                                key={idx}
+                                href={place.link || '#'}
+                                target={place.link ? "_blank" : undefined}
+                                rel={place.link ? "noopener noreferrer" : undefined}
+                                className={`
+                                    group relative overflow-hidden px-6 py-4 rounded-2xl border transition-all duration-500
+                                    ${place.type === 'intl'
+                                        ? 'bg-accent-primary/20 border-accent-primary/30 text-accent-primary hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary scale-110 z-10'
+                                        : 'bg-white/[0.08] border-white/10 text-text-secondary hover:text-white hover:border-white/30 hover:bg-white/10'
+                                    }
+                                    ${place.link ? 'cursor-pointer' : 'cursor-default'}
+                                `}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <place.RandomIcon size={place.type === 'intl' ? 16 : 14} className={place.type === 'intl' ? 'opacity-80' : 'opacity-50'} />
+                                    <span className={`text-[11px] font-black uppercase tracking-widest ${place.type === 'intl' ? 'tracking-[0.2em]' : ''}`}>
+                                        {place.name}
+                                    </span>
+                                </div>
+                                {place.link && (
+                                    <div className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <Zap size={8} fill="currentColor" className="text-accent-secondary" />
+                                    </div>
+                                )}
+                            </a>
+                        ))}
                     </div>
                 </section>
             </div>
