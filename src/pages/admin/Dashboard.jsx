@@ -243,7 +243,7 @@ const ProfileEditor = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await setDoc(doc(db, 'config', 'meData'), meData);
+            await setDoc(doc(db, 'config', 'meData'), meData, { merge: true });
             alert("Đã lưu thành công!");
         } catch (err) {
             console.error("Save error:", err);
@@ -460,7 +460,7 @@ const BiographyEditor = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await setDoc(doc(db, 'config', 'meData'), { ...remoteData, ...meData });
+            await setDoc(doc(db, 'config', 'meData'), meData, { merge: true });
             alert("Đã cập nhật tiểu sử!");
         } catch (err) {
             console.error(err);
