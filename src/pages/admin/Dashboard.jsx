@@ -475,18 +475,28 @@ const AdminDashboard = () => {
 
     if (loadingAuth || (!user && !loadingAuth && !auth.currentUser)) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-transparent backdrop-blur-sm">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-accent-primary"></div>
-                    <span className="text-[10px] text-accent-primary font-black uppercase tracking-[0.2em] animate-pulse">Xác thực quyền truy cập...</span>
+            <div className="min-h-screen flex items-center justify-center bg-bg-primary/95 backdrop-blur-xl z-[100] fixed inset-0">
+                <div className="flex flex-col items-center gap-6 text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-primary border-r-2 border-r-transparent"></div>
+                    <div className="space-y-2">
+                        <span className="block text-xs text-accent-primary font-black uppercase tracking-[0.3em] animate-pulse">Aura Admin Security</span>
+                        <p className="text-[10px] text-text-secondary italic opacity-60">Đang xác thực quyền truy cập của bạn...</p>
+                    </div>
+                    {/* Failsafe link if stuck */}
+                    <button
+                        onClick={() => navigate('/admin/login')}
+                        className="mt-8 text-[9px] font-bold text-text-secondary hover:text-white underline underline-offset-4 opacity-40 hover:opacity-100 transition-all uppercase tracking-widest"
+                    >
+                        Nếu không thể tự động chuyển hướng, nhấn vào đây
+                    </button>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-transparent flex">
-            <aside className="w-64 border-r border-white/5 bg-bg-primary/30 backdrop-blur-2xl flex flex-col fixed inset-y-0 left-0">
+        <div className="min-h-screen bg-transparent flex relative z-10">
+            <aside className="w-64 border-r border-white/5 bg-bg-primary/80 backdrop-blur-2xl flex flex-col fixed inset-y-0 left-0 z-50">
                 <div className="p-8 mb-4">
                     <h1 className="text-xl font-black text-white tracking-widest uppercase">Aura CMS</h1>
                     <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1 italic">phatdo.com</p>
@@ -505,7 +515,7 @@ const AdminDashboard = () => {
                 </div>
             </aside>
 
-            <main className="flex-grow ml-64 p-12 overflow-y-auto bg-transparent">
+            <main className="flex-grow ml-64 p-12 overflow-y-auto bg-transparent relative z-10">
                 <header className="mb-12 flex justify-between items-center text-white">
                     <div>
                         <h2 className="text-4xl font-black tracking-tighter capitalize">{activeTab}</h2>

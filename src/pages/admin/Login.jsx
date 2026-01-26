@@ -21,8 +21,8 @@ const AdminLogin = () => {
 
     if (loadingAuth) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-transparent backdrop-blur-sm">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-accent-primary"></div>
+            <div className="min-h-screen flex items-center justify-center bg-bg-primary/95 backdrop-blur-xl z-[100] fixed inset-0">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-primary border-r-2 border-r-transparent"></div>
             </div>
         );
     }
