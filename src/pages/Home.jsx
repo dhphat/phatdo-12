@@ -49,11 +49,17 @@ const Home = () => {
                         {meData?.homeText1 ? (
                             meData.homeText1.split('\n').map((line, i) => (
                                 <React.Fragment key={i}>
-                                    {line.includes('guidance') ? (
-                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">{line}</span>
-                                    ) : (
-                                        <>{line}<br /></>
-                                    )}
+                                    {line.split(/(\*[^*]+\*)/g).map((part, j) => {
+                                        if (part.startsWith('*') && part.endsWith('*')) {
+                                            return (
+                                                <span key={j} className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">
+                                                    {part.slice(1, -1)}
+                                                </span>
+                                            );
+                                        }
+                                        return <span key={j}>{part}</span>;
+                                    })}
+                                    {i < meData.homeText1.split('\n').length - 1 && <br />}
                                 </React.Fragment>
                             ))
                         ) : (

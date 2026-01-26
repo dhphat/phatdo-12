@@ -128,11 +128,53 @@ const LinkEditor = ({ links = [], onChange, label }) => {
     );
 };
 
+const TravelListEditor = ({ items = [], onChange, label, placeholder }) => {
+    const addItem = () => onChange([...items, '']);
+    const removeItem = (idx) => onChange(items.filter((_, i) => i !== idx));
+    const updateItem = (idx, value) => {
+        const newItems = [...items];
+        newItems[idx] = value;
+        onChange(newItems);
+    };
+
+    return (
+        <div className="space-y-4">
+            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{label}</label>
+            <div className="space-y-2">
+                {items.map((item, idx) => (
+                    <div key={idx} className="flex gap-2">
+                        <input
+                            type="text"
+                            placeholder={placeholder}
+                            value={item}
+                            onChange={(e) => updateItem(idx, e.target.value)}
+                            className="flex-grow bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:outline-none focus:border-accent-primary/30 transition-all font-bold"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => removeItem(idx)}
+                            className="p-3 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 transition-all border border-red-500/10 hover:text-white"
+                        >
+                            <Trash2 size={14} />
+                        </button>
+                    </div>
+                ))}
+                <button
+                    type="button"
+                    onClick={addItem}
+                    className="w-full py-3 rounded-xl border border-dashed border-white/10 text-[9px] font-black uppercase tracking-widest text-text-secondary hover:border-accent-primary/50 hover:text-accent-primary transition-all flex items-center justify-center gap-2"
+                >
+                    <Plus size={12} /> Thêm {label.toLowerCase()}
+                </button>
+            </div>
+        </div>
+    );
+};
+
 const ProfileEditor = () => {
     const { data: remoteData, loading } = useMeData();
     const [meData, setMeData] = useState({
         headline: '',
-        bio: '',
         roles: [],
         homeText1: 'expert creative guidance.',
         homeText2: 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
@@ -142,7 +184,10 @@ const ProfileEditor = () => {
         meTitle: 'về mình.',
         meSubtitle: 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
         chillTitle: 'chill với...',
-        chillSubtitle: 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.'
+        chillSubtitle: 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
+        ogImage: '',
+        siteTitle: '',
+        faviconUrl: ''
     });
     const [saving, setSaving] = useState(false);
 
@@ -150,7 +195,6 @@ const ProfileEditor = () => {
         if (remoteData) {
             setMeData({
                 headline: remoteData.headline || '',
-                bio: remoteData.bio || '',
                 roles: remoteData.roles || [],
                 homeText1: remoteData.homeText1 || 'expert creative guidance.',
                 homeText2: remoteData.homeText2 || 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
@@ -161,9 +205,9 @@ const ProfileEditor = () => {
                 meSubtitle: remoteData.meSubtitle || 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
                 chillTitle: remoteData.chillTitle || 'chill với...',
                 chillSubtitle: remoteData.chillSubtitle || 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
-                ogImage: remoteData.ogImage || '/assets/hero-portrait-blue.png',
-                siteTitle: remoteData.siteTitle || 'Phat Do | Creative Designer & Consultant',
-                faviconUrl: remoteData.faviconUrl || '/vite.svg'
+                ogImage: remoteData.ogImage || '',
+                siteTitle: remoteData.siteTitle || '',
+                faviconUrl: remoteData.faviconUrl || ''
             });
         }
     }, [remoteData]);
@@ -255,24 +299,42 @@ const ProfileEditor = () => {
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="pt-10 border-t border-white/5 space-y-8">
-                        <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cấu hình SEO & Chia sẻ</h3>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="space-y-6">
-                                <p className="text-[10px] text-text-secondary leading-relaxed opacity-60">
-                                    Hình ảnh này sẽ hiển thị khi bạn chia sẻ link website lên Facebook, Zalo, iMessage... Nên dùng ảnh có tỉ lệ 1200x630px để hiển thị đẹp nhất.
-                                </p>
-                                <ImageUpload
-                                    label="Ảnh Thumbnail Website (OG Image)"
-                                    currentImage={meData.ogImage}
-                                    onUpload={(url) => setMeData({ ...meData, ogImage: url })}
+                <div className="pt-10 border-t border-white/5 space-y-8">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cấu hình SEO & Chia sẻ</h3>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                            <p className="text-[10px] text-text-secondary leading-relaxed opacity-60">
+                                Hình ảnh này sẽ hiển thị khi bạn chia sẻ link website lên Facebook, Zalo, iMessage... Nên dùng ảnh có tỉ lệ 1200x630px để hiển thị đẹp nhất.
+                            </p>
+                            <ImageUpload
+                                label="Ảnh Thumbnail Website (OG Image)"
+                                currentImage={meData.ogImage}
+                                onUpload={(url) => setMeData({ ...meData, ogImage: url })}
+                            />
+                        </div>
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Tên Website (Tab trình duyệt)</label>
+                                <input
+                                    type="text"
+                                    value={meData.siteTitle}
+                                    onChange={e => setMeData({ ...meData, siteTitle: e.target.value })}
+                                    className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs"
+                                    placeholder="Phat Do | Creative Designer & Consultant"
                                 />
                             </div>
+                            <ImageUpload
+                                label="Biểu tượng Website (Favicon)"
+                                currentImage={meData.faviconUrl}
+                                onUpload={(url) => setMeData({ ...meData, faviconUrl: url })}
+                            />
                         </div>
                     </div>
                 </div>
-                <div className="space-y-2">
+
+                <div className="pt-10 border-t border-white/5 space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Danh sách vị trí (Roles)</label>
                     <div className="space-y-3">
                         {meData?.roles?.map((role, idx) => (
@@ -408,24 +470,18 @@ const BiographyEditor = () => {
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-primary">Du lịch (Travel)</label>
                 </div>
                 <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                        <label className="text-[8px] font-black uppercase tracking-widest text-text-secondary">Quốc gia (Countries)</label>
-                        <textarea
-                            value={meData.travel.countries.join(', ')}
-                            onChange={e => setMeData({ ...meData, travel: { ...meData.travel, countries: e.target.value.split(',').map(s => s.trim()).filter(s => s) } })}
-                            className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-accent-primary/30 h-24"
-                            placeholder="Vietnam, Thailand, Singapore..."
-                        />
-                    </div>
-                    <div className="space-y-4">
-                        <label className="text-[8px] font-black uppercase tracking-widest text-text-secondary">Tỉnh thành (Provinces)</label>
-                        <textarea
-                            value={meData.travel.provinces.join(', ')}
-                            onChange={e => setMeData({ ...meData, travel: { ...meData.travel, provinces: e.target.value.split(',').map(s => s.trim()).filter(s => s) } })}
-                            className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-accent-primary/30 h-24"
-                            placeholder="TP. HCM, Hà Nội, Đà Lạt..."
-                        />
-                    </div>
+                    <TravelListEditor
+                        label="Quốc gia (Countries)"
+                        items={meData.travel.countries}
+                        onChange={(newItems) => setMeData({ ...meData, travel: { ...meData.travel, countries: newItems } })}
+                        placeholder="VD: Vietnam"
+                    />
+                    <TravelListEditor
+                        label="Tỉnh thành (Provinces)"
+                        items={meData.travel.provinces}
+                        onChange={(newItems) => setMeData({ ...meData, travel: { ...meData.travel, provinces: newItems } })}
+                        placeholder="VD: TP. HCM"
+                    />
                 </div>
             </div>
 

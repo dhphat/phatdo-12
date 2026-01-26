@@ -4,9 +4,9 @@ import { useMeData, useCollection } from '../hooks/useContent';
 import { projects as staticProjects, photos as staticPhotos, clips as staticClips, crew as staticCrew } from '../data/content';
 
 const PageHeader = ({ title, subtitle }) => (
-    <div className="mb-20 animate-fade-in-up text-center">
-        <h1 className="text-6xl md:text-8xl font-black mb-8 text-white tracking-tighter lowercase">{title}</h1>
-        <p className="text-lg md:text-xl text-text-secondary max-w-3xl font-light leading-relaxed mx-auto italic opacity-60 lowercase">{subtitle}</p>
+    <div className="mb-12 md:mb-20 animate-fade-in-up text-center px-4">
+        <h1 className="text-5xl md:text-8xl font-black mb-6 md:mb-8 text-white tracking-tighter lowercase leading-tight">{title}</h1>
+        <p className="text-base md:text-xl text-text-secondary max-w-3xl font-light leading-relaxed mx-auto italic opacity-60 lowercase">{subtitle}</p>
     </div>
 );
 
@@ -37,10 +37,10 @@ const ProjectItem = ({ item }) => (
     <div className="glass-panel p-8 md:p-10 rounded-[2rem] border border-white/5 animate-fade-in-up hover:border-accent-primary/10 transition-colors duration-500">
         <div className="flex flex-col lg:flex-row gap-10">
             <div className="lg:w-1/4">
-                <div className="aspect-square rounded-2xl overflow-hidden bg-white/5 flex items-center justify-center p-6 border border-white/5 mb-4 group ring-1 ring-white/10">
+                <div className="aspect-square rounded-2xl overflow-hidden bg-white/5 flex items-center justify-center p-6 border border-white/5 mb-4 group ring-1 ring-white/10 max-w-[140px] lg:max-w-none mx-auto lg:mx-0">
                     <img src={item.logo} alt={item.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-4 text-center lg:text-left">
                     {item.websiteUrl && (
                         <a href={item.websiteUrl} target="_blank" rel="noreferrer" className="flex items-center justify-between text-accent-primary hover:text-white transition-colors font-black uppercase text-[9px] tracking-[0.2em] bg-white/5 p-3 rounded-xl border border-white/5">
                             visit project <ArrowRight size={14} />
@@ -154,7 +154,7 @@ const ChillWith = () => {
                 subtitle={remoteMeData?.chillSubtitle || "nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình."}
             />
 
-            <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-20 animate-fade-in-up">
+            <div className="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-2 md:gap-3 mb-12 md:mb-20 animate-fade-in-up overflow-x-auto pb-6 px-4 scrollbar-hide">
                 <TabButton active={activeTab === 'project'} onClick={() => setActiveTab('project')} icon={Briefcase} label="Project" />
                 <TabButton active={activeTab === 'hinh'} onClick={() => setActiveTab('hinh')} icon={ImageIcon} label="Hình" />
                 <TabButton active={activeTab === 'clip'} onClick={() => setActiveTab('clip')} icon={Video} label="Clip" />
