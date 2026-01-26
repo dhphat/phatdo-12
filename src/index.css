@@ -23,10 +23,11 @@
 
   body {
     font-family: var(--font-sans);
-    @apply bg-bg-primary text-text-primary antialiased min-h-screen leading-relaxed p-0 selection:bg-accent-primary selection:text-bg-primary;
-    cursor: none !important;
+    @apply bg-bg-primary text-text-primary antialiased min-h-screen leading-relaxed p-0;
+  }
 
-    /* Flashlight effect targeting cyan/blue */
+  /* Forest background for public routes only */
+  .public-layout {
     background-image:
       radial-gradient(circle 400px at var(--mouse-x) var(--mouse-y), rgba(0, 229, 255, 0.12), transparent 80%),
       linear-gradient(to bottom, rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.98)),
@@ -35,15 +36,20 @@
     background-attachment: fixed;
     background-position: center;
     transition: background 0.1s ease-out;
+    cursor: none !important;
   }
 
-  a,
-  button,
-  input,
-  textarea,
-  select,
-  [role="button"] {
+  .public-layout a,
+  .public-layout button,
+  .public-layout input,
+  .public-layout textarea,
+  .public-layout select,
+  .public-layout [role="button"] {
     cursor: none !important;
+  }
+
+  .public-layout ::selection {
+    @apply bg-accent-primary text-bg-primary;
   }
 
   h1,
