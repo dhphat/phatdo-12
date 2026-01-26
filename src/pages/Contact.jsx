@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Phone, Mail, Facebook, Instagram, Star, Zap, Sparkles, Smile, Compass, MapPin } from 'lucide-react';
+import { Phone, Mail, Facebook, Instagram, Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 
 const ContactItem = ({ icon: Icon, label, value, href }) => {
