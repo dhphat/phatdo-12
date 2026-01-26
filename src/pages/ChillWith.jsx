@@ -3,6 +3,18 @@ import { Briefcase, Image as ImageIcon, Video, Users, ExternalLink, Play, ArrowR
 import { useMeData, useCollection } from '../hooks/useContent';
 import { projects as staticProjects, visual as staticVisuals, clip as staticClips, crew as staticCrew } from '../data/content';
 
+const getEmbedUrl = (url) => {
+    if (!url) return '';
+    if (url.includes('youtube.com/embed/')) return url;
+    let videoId = '';
+    if (url.includes('youtube.com/watch?v=')) {
+        videoId = url.split('v=')[1]?.split('&')[0];
+    } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1]?.split('?')[0];
+    }
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+};
+
 const PageHeader = ({ title, subtitle, headline, headlineIcon: HeadlineIcon }) => (
     <div className="mb-12 md:mb-20 animate-fade-in-up text-center px-4">
         {headline && (
@@ -34,7 +46,7 @@ const TabButton = ({ active, onClick, icon: Icon, label }) => (
 );
 
 const MediaGrid = ({ images }) => (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6 max-w-2xl">
         {images?.map((img, idx) => (
             <div key={idx} className="aspect-square rounded-xl overflow-hidden border border-white/5 group/img">
                 <img src={img} alt="" className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 active:grayscale-0 transition-all duration-1000 group-hover/img:scale-110 active:scale-110" />
@@ -72,8 +84,8 @@ const ProjectItem = ({ item }) => (
                 <p className="text-base text-text-secondary leading-relaxed font-light mb-6 opacity-80">{item.description}</p>
 
                 {item.videoUrl && (
-                    <div className="aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5 mb-6 group">
-                        <iframe src={item.videoUrl} title={item.title} className="w-full h-full opacity-40 group-hover:opacity-100 active:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0 active:grayscale-0" />
+                    <div className="aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5 mb-6 group max-w-2xl">
+                        <iframe src={getEmbedUrl(item.videoUrl)} title={item.title} className="w-full h-full opacity-40 group-hover:opacity-100 active:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0 active:grayscale-0" />
                     </div>
                 )}
                 {item.images && <MediaGrid images={item.images} />}
@@ -97,8 +109,8 @@ const VisualItem = ({ item }) => (
 const ClipItem = ({ item }) => (
     <div className="glass-panel p-8 rounded-[2rem] border border-white/5 animate-fade-in-up">
         <div className="flex flex-col gap-6">
-            <div className="aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5 group relative">
-                <iframe src={item.videoUrl} title={item.title} className="w-full h-full opacity-40 group-hover:opacity-100 active:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0 active:grayscale-0" />
+            <div className="aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5 group relative max-w-2xl">
+                <iframe src={getEmbedUrl(item.videoUrl)} title={item.title} className="w-full h-full opacity-40 group-hover:opacity-100 active:opacity-100 transition-opacity duration-1000 grayscale group-hover:grayscale-0 active:grayscale-0" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity">
                     <div className="w-16 h-16 rounded-full bg-accent-primary/20 backdrop-blur-sm flex items-center justify-center text-accent-primary">
                         <Play size={24} fill="currentColor" />
