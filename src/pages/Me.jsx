@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Briefcase, Award, Globe, MapPin, Zap } from 'lucide-react';
+import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
 import { meData as staticMeData } from '../data/content';
