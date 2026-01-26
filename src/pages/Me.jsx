@@ -49,10 +49,10 @@ const Me = () => {
                         <h4 className="text-accent-primary font-bold tracking-[0.4em] text-[11px] uppercase">creative identity</h4>
                     </div>
                     <h1 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter text-white">
-                        về <span className="text-accent-primary">mình.</span>
+                        {meData.meTitle || "về mình."}
                     </h1>
                     <p className="text-lg md:text-xl text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto italic opacity-60">
-                        ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.
+                        {meData.meSubtitle || "ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo."}
                     </p>
                 </header>
 
@@ -63,7 +63,7 @@ const Me = () => {
                             học vấn
                         </h2>
                         <div className="space-y-2">
-                            {meData.education.map((item, index) => (
+                            {meData.education?.map((item, index) => (
                                 <TimelineItem key={index} index={index} {...item} />
                             ))}
                         </div>
@@ -75,7 +75,7 @@ const Me = () => {
                             kinh nghiệm
                         </h2>
                         <div className="space-y-2">
-                            {meData.experience.map((item, index) => (
+                            {meData.experience?.map((item, index) => (
                                 <TimelineItem key={index} index={index} {...item} />
                             ))}
                         </div>
@@ -86,7 +86,7 @@ const Me = () => {
                 <section className="mt-32 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                     <h2 className="text-2xl font-black mb-12 text-white uppercase italic tracking-widest text-[13px] opacity-40 text-center">thành tích</h2>
                     <div className="grid md:grid-cols-2 gap-6">
-                        {meData.awards.map((award, index) => (
+                        {meData.awards?.map((award, index) => (
                             <AwardItem key={index} {...award} />
                         ))}
                     </div>

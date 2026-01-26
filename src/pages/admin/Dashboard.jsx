@@ -8,22 +8,91 @@ import { useMeData, useCollection } from '../../hooks/useContent';
 import DataMigrator from '../../components/DataMigrator';
 import { Settings, Image, Layout as LayoutIcon, LogOut, ChevronRight, Plus, Save, Trash2, Database, Upload, Link, Video as VideoIcon, Globe, MapPin, BookOpen } from 'lucide-react';
 
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
     <button
         onClick={onClick}
         className={`w-full flex items-center gap-4 px-6 py-4 transition-all duration-300 ${active ? 'bg-accent-primary/10 text-accent-primary border-r-2 border-accent-primary' : 'text-text-secondary hover:bg-white/5 hover:text-white'}`}
     >
-        <Icon size={20} />
-        <span className="text-sm font-bold tracking-tight">{label}</span>
+        <Icon size={18} />
+        <span className="text-[11px] font-black uppercase tracking-widest">{label}</span>
     </button>
 );
+
+const ImageUpload = ({ onUpload, label, currentImage, multiple = false }) => {
+    const [uploading, setUploading] = useState(false);
+
+    const handleFileChange = async (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+
+        setUploading(true);
+        try {
+            const urls = await Promise.all(files.map(async (file) => {
+                const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
+                await uploadBytes(storageRef, file);
+                return await getDownloadURL(storageRef);
+            }));
+
+            if (multiple) {
+                onUpload(urls);
+            } else {
+                onUpload(urls[0]);
+            }
+        } catch (err) {
+            console.error("Upload error:", err);
+            alert("Lỗi khi tải ảnh lên.");
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    return (
+        <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{label}</label>
+            <div className="flex flex-col gap-4">
+                {currentImage && !multiple && (
+                    <div className="w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+                        <img src={currentImage} alt="Preview" className="w-full h-full object-cover" />
+                    </div>
+                )}
+                {multiple && Array.isArray(currentImage) && currentImage.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {currentImage.map((url, i) => (
+                            <div key={i} className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                                <img src={url} alt="Preview" className="w-full h-full object-cover" />
+                            </div>
+                        ))}
+                    </div>
+                )}
+                <label className={`cursor-pointer group flex flex-col items-center justify-center gap-2 p-6 rounded-2xl border border-dashed border-white/10 hover:border-accent-primary/50 hover:bg-white/[0.02] transition-all ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <Upload size={20} className="text-text-secondary group-hover:text-accent-primary transition-colors" />
+                    <span className="text-[10px] font-bold text-text-secondary group-hover:text-white uppercase tracking-widest">
+                        {uploading ? "Đang tải lên..." : (multiple ? "Tải lên nhiều ảnh" : "Chọn ảnh từ máy")}
+                    </span>
+                    <input type="file" multiple={multiple} onChange={handleFileChange} className="hidden" accept="image/*" />
+                </label>
+            </div>
+        </div>
+    );
+};
 
 const ProfileEditor = () => {
     const { data: remoteData, loading } = useMeData();
     const [meData, setMeData] = useState({
         headline: '',
         bio: '',
-        roles: []
+        roles: [],
+        homeText1: 'expert creative guidance.',
+        homeText2: 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
+        homeButtonText: 'khám phá dự án',
+        homeButtonLink: '#shortcuts',
+        heroImage: '/assets/hero-portrait-blue.png',
+        meTitle: 'về mình.',
+        meSubtitle: 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
+        chillTitle: 'chill với...',
+        chillSubtitle: 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.'
     });
     const [saving, setSaving] = useState(false);
 
@@ -32,7 +101,16 @@ const ProfileEditor = () => {
             setMeData({
                 headline: remoteData.headline || '',
                 bio: remoteData.bio || '',
-                roles: remoteData.roles || []
+                roles: remoteData.roles || [],
+                homeText1: remoteData.homeText1 || 'expert creative guidance.',
+                homeText2: remoteData.homeText2 || 'nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with...',
+                homeButtonText: remoteData.homeButtonText || 'khám phá dự án',
+                homeButtonLink: remoteData.homeButtonLink || '#shortcuts',
+                heroImage: remoteData.heroImage || '/assets/hero-portrait-blue.png',
+                meTitle: remoteData.meTitle || 'về mình.',
+                meSubtitle: remoteData.meSubtitle || 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
+                chillTitle: remoteData.chillTitle || 'chill với...',
+                chillSubtitle: remoteData.chillSubtitle || 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.'
             });
         }
     }, [remoteData]);
@@ -73,6 +151,65 @@ const ProfileEditor = () => {
                         rows={3}
                         className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 focus:bg-white/[0.08] transition-all font-light leading-relaxed italic"
                     />
+                </div>
+
+                <div className="pt-10 border-t border-white/5 space-y-8">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cài đặt Trang chủ</h3>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Tiêu đề chính (Dòng 1+2+3)</label>
+                                <textarea
+                                    value={meData.homeText1}
+                                    onChange={(e) => setMeData({ ...meData, homeText1: e.target.value })}
+                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30"
+                                    placeholder="expert creative guidance."
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Mô tả ngắn trang chủ</label>
+                                <textarea
+                                    value={meData.homeText2}
+                                    onChange={(e) => setMeData({ ...meData, homeText2: e.target.value })}
+                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Nút bấm Home (Text & Link)</label>
+                                <div className="flex gap-2">
+                                    <input type="text" value={meData.homeButtonText} onChange={e => setMeData({ ...meData, homeButtonText: e.target.value })} className="flex-grow bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                                    <input type="text" value={meData.homeButtonLink} onChange={e => setMeData({ ...meData, homeButtonLink: e.target.value })} className="w-1/3 bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                                </div>
+                            </div>
+                            <ImageUpload
+                                label="Hình nền trang chủ (Hero)"
+                                currentImage={meData.heroImage}
+                                onUpload={(url) => setMeData({ ...meData, heroImage: url })}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="pt-10 border-t border-white/5 space-y-8">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cài đặt Trang con (Me & Chill)</h3>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Trang 'Về mình' (Tiêu đề & Mô tả)</label>
+                                <input type="text" value={meData.meTitle} onChange={e => setMeData({ ...meData, meTitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
+                                <textarea value={meData.meSubtitle} onChange={e => setMeData({ ...meData, meSubtitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                            </div>
+                        </div>
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Trang 'Chill với' (Tiêu đề & Mô tả)</label>
+                                <input type="text" value={meData.chillTitle} onChange={e => setMeData({ ...meData, chillTitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs mb-2" />
+                                <textarea value={meData.chillSubtitle} onChange={e => setMeData({ ...meData, chillSubtitle: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Danh sách vị trí (Roles)</label>
@@ -294,12 +431,23 @@ const ProjectsEditor = () => {
                             <input type="text" value={editing.category} onChange={e => setEditing({ ...editing, category: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Logo URL</label>
-                            <input type="text" value={editing.logo} onChange={e => setEditing({ ...editing, logo: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
+                            <ImageUpload
+                                label="Logo dự án"
+                                currentImage={editing.logo}
+                                onUpload={(url) => setEditing({ ...editing, logo: url })}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <ImageUpload
+                                label="Hình ảnh dự án (Tải nhiều)"
+                                multiple={true}
+                                currentImage={editing.images}
+                                onUpload={(urls) => setEditing({ ...editing, images: [...(editing.images || []), ...urls] })}
+                            />
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Website URL</label>
-                            <input type="text" value={editing.websiteUrl} onChange={e => setEditing({ ...editing, websiteUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
+                            <input type="text" value={editing.websiteUrl} onChange={e => setEditing({ ...editing, websiteUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 font-sans" />
                         </div>
                     </div>
                     <div className="space-y-6">
@@ -404,14 +552,24 @@ const MediaEditor = () => {
                     )}
                     {(subTab === 'photos' || subTab === 'crew') && (
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Image URL</label>
-                            <input type="text" value={editing.image || (editing.images ? editing.images[0] : '')} onChange={e => setEditing(subTab === 'crew' ? { ...editing, images: [e.target.value] } : { ...editing, image: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
+                            <ImageUpload
+                                label={subTab === 'photos' ? "Hình ảnh" : "Hình ảnh Crew"}
+                                multiple={subTab === 'photos'}
+                                currentImage={subTab === 'photos' ? editing.images : editing.images?.[0]}
+                                onUpload={(url_or_urls) => {
+                                    if (subTab === 'photos') {
+                                        setEditing({ ...editing, images: [...(editing.images || []), ...url_or_urls] });
+                                    } else {
+                                        setEditing({ ...editing, images: [url_or_urls] });
+                                    }
+                                }}
+                            />
                         </div>
                     )}
                     {subTab === 'clips' && (
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Video URL (Embed)</label>
-                            <input type="text" value={editing.videoUrl || ''} onChange={e => setEditing({ ...editing, videoUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Video URL (Embed/Youtube)</label>
+                            <input type="text" value={editing.videoUrl || ''} onChange={e => setEditing({ ...editing, videoUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 font-sans" />
                         </div>
                     )}
                     <button type="submit" disabled={saving} className="w-full btn-pill py-5 bg-accent-primary text-bg-primary font-black uppercase tracking-widest mt-4">
@@ -424,9 +582,9 @@ const MediaEditor = () => {
 
     return (
         <div className="space-y-10 animate-fade-in-up">
-            <div className="flex gap-4 p-1.5 bg-white/5 rounded-2xl w-fit mx-auto">
+            <div className="flex gap-2 p-1 bg-white/5 rounded-2xl w-full md:w-fit mx-auto overflow-x-auto whitespace-nowrap scrollbar-hide">
                 {['photos', 'clips', 'crew'].map(t => (
-                    <button key={t} onClick={() => setSubTab(t)} className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${subTab === t ? 'bg-white text-bg-primary shadow-lg' : 'text-text-secondary hover:text-white'}`}>
+                    <button key={t} onClick={() => setSubTab(t)} className={`flex-grow md:flex-none px-4 md:px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all ${subTab === t ? 'bg-white text-bg-primary shadow-lg' : 'text-text-secondary hover:text-white'}`}>
                         {t}
                     </button>
                 ))}
@@ -442,7 +600,7 @@ const MediaEditor = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {items?.map(item => (
                     <div key={item.id} className="glass-panel group relative rounded-2xl overflow-hidden border-white/5 hover:border-accent-primary/20 transition-all aspect-[4/5]">
-                        {(item.image || item.images) && (
+                        {(item.image || item.images?.length > 0) && (
                             <img src={item.image || item.images[0]} alt="" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
                         )}
                         <div className="absolute inset-0 p-6 flex flex-col justify-end bg-gradient-to-t from-bg-primary">
@@ -464,6 +622,7 @@ const AdminDashboard = () => {
     const [user, loadingAuth] = useAuthState(auth);
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('profile');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleLogout = () => {
         signOut(auth);
@@ -503,38 +662,49 @@ const AdminDashboard = () => {
 
     return (
         <div className="flex min-h-screen bg-[#020617] text-white cursor-auto relative">
+            {/* Sidebar Overlay for Mobile */}
+            <div className={`fixed inset-0 bg-black/80 z-[60] transition-opacity duration-300 md:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsMobileMenuOpen(false)}></div>
+
             {/* Sidebar */}
-            <aside className="w-64 border-r border-white/5 bg-[#010410] flex flex-col sticky top-0 h-screen z-50">
-                <div className="p-8 mb-4">
-                    <h1 className="text-xl font-black text-white tracking-widest uppercase">Aura CMS</h1>
-                    <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1 italic">phatdo.com</p>
+            <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 border-r border-white/5 bg-[#010410] flex flex-col z-[70] transition-transform duration-500 ease-in-out md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="p-8 mb-4 flex justify-between items-center">
+                    <div>
+                        <h1 className="text-xl font-black text-white tracking-widest uppercase">Aura CMS</h1>
+                        <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1 italic">phatdo.com</p>
+                    </div>
+                    <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-text-secondary"><Plus className="rotate-45" size={24} /></button>
                 </div>
                 <nav className="flex-grow overflow-y-auto">
-                    <SidebarItem icon={Settings} label="Hồ sơ & Chức danh" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
-                    <SidebarItem icon={BookOpen} label="Tiểu sử & Thành tích" active={activeTab === 'biography'} onClick={() => setActiveTab('biography')} />
-                    <SidebarItem icon={LayoutIcon} label="Dự án (Work)" active={activeTab === 'projects'} onClick={() => setActiveTab('projects')} />
-                    <SidebarItem icon={Image} label="Media (Photos/Clips)" active={activeTab === 'media'} onClick={() => setActiveTab('media')} />
-                    <SidebarItem icon={Database} label="Hệ thống (Migration)" active={activeTab === 'system'} onClick={() => setActiveTab('system')} />
+                    <SidebarItem icon={Settings} label="Hồ sơ & Chức danh" active={activeTab === 'profile'} onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }} />
+                    <SidebarItem icon={BookOpen} label="Tiểu sử & Thành tích" active={activeTab === 'biography'} onClick={() => { setActiveTab('biography'); setIsMobileMenuOpen(false); }} />
+                    <SidebarItem icon={LayoutIcon} label="Dự án (Work)" active={activeTab === 'projects'} onClick={() => { setActiveTab('projects'); setIsMobileMenuOpen(false); }} />
+                    <SidebarItem icon={Image} label="Media (Photos/Clips)" active={activeTab === 'media'} onClick={() => { setActiveTab('media'); setIsMobileMenuOpen(false); }} />
+                    <SidebarItem icon={Database} label="Hệ thống (Migration)" active={activeTab === 'system'} onClick={() => { setActiveTab('system'); setIsMobileMenuOpen(false); }} />
                 </nav>
                 <div className="p-6 border-t border-white/5 bg-[#010410]">
-                    <button onClick={handleLogout} className="flex items-center gap-3 text-text-secondary hover:text-red-400 transition-colors text-xs font-bold uppercase tracking-widest pl-2">
+                    <button onClick={handleLogout} className="flex items-center gap-3 text-text-secondary hover:text-red-400 transition-colors text-[10px] font-black uppercase tracking-widest pl-2">
                         <LogOut size={16} /> Đăng xuất
                     </button>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-grow p-12 overflow-y-auto relative z-10">
+            <main className="flex-grow min-w-0 p-6 md:p-12 overflow-y-auto relative z-10">
                 <header className="mb-12 flex justify-between items-center text-white">
-                    <div>
-                        <h2 className="text-4xl font-black tracking-tighter capitalize">{activeTab}</h2>
-                        <div className="flex items-center gap-2 text-[11px] text-text-secondary mt-1 uppercase tracking-widest opacity-40 italic">
-                            <span>Admin</span> <ChevronRight size={10} /> <span>Dashboard</span> <ChevronRight size={10} /> <span className="text-accent-primary font-bold">{activeTab}</span>
+                    <div className="flex items-center gap-4">
+                        <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden p-3 rounded-xl bg-white/5 border border-white/5">
+                            <Plus size={20} />
+                        </button>
+                        <div>
+                            <h2 className="text-2xl md:text-4xl font-black tracking-tighter capitalize">{activeTab}</h2>
+                            <div className="flex items-center gap-2 text-[10px] text-text-secondary mt-1 uppercase tracking-widest opacity-40 italic">
+                                <span className="hidden md:inline">Admin</span> <span className="hidden md:inline"><ChevronRight size={10} /></span> <span>Dashboard</span> <ChevronRight size={10} /> <span className="text-accent-primary font-bold">{activeTab}</span>
+                            </div>
                         </div>
                     </div>
                 </header>
 
-                <div className="bg-[#0A192F]/50 border border-white/5 p-10 rounded-[2.5rem] shadow-2xl min-h-[600px] flex flex-col items-stretch">
+                <div className="bg-[#0A192F]/50 border border-white/5 p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] shadow-2xl min-h-[600px] flex flex-col items-stretch overflow-hidden">
                     {activeTab === 'profile' && <ProfileEditor />}
                     {activeTab === 'biography' && <BiographyEditor />}
                     {activeTab === 'projects' && <ProjectsEditor />}

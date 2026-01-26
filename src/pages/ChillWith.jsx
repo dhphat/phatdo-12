@@ -142,14 +142,19 @@ const ChillWith = () => {
     const clips = remoteClips.length > 0 ? remoteClips : staticClips;
     const crew = remoteCrew.length > 0 ? remoteCrew : staticCrew;
 
+    const { data: remoteMeData } = useMeData();
+
     const isLoading = loadingP || loadingPh || loadingC || loadingCr;
     if (isLoading && !remoteProjects.length) return null;
 
     return (
         <div className="container min-h-screen py-40 md:py-56">
-            <PageHeader title="chill với..." subtitle="nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình." />
+            <PageHeader
+                title={remoteMeData?.chillTitle || "chill với..."}
+                subtitle={remoteMeData?.chillSubtitle || "nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình."}
+            />
 
-            <div className="flex flex-wrap justify-center gap-3 mb-20 animate-fade-in-up">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-20 animate-fade-in-up">
                 <TabButton active={activeTab === 'project'} onClick={() => setActiveTab('project')} icon={Briefcase} label="Project" />
                 <TabButton active={activeTab === 'hinh'} onClick={() => setActiveTab('hinh')} icon={ImageIcon} label="Hình" />
                 <TabButton active={activeTab === 'clip'} onClick={() => setActiveTab('clip')} icon={Video} label="Clip" />

@@ -46,18 +46,39 @@ const Home = () => {
                     </div>
 
                     <h1 className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 leading-[0.9] tracking-tighter animate-fade-in-up text-white lowercase">
-                        expert <br />
-                        creative <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">guidance.</span>
+                        {meData?.homeText1 ? (
+                            meData.homeText1.split('\n').map((line, i) => (
+                                <React.Fragment key={i}>
+                                    {line.includes('guidance') ? (
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">{line}</span>
+                                    ) : (
+                                        <>{line}<br /></>
+                                    )}
+                                </React.Fragment>
+                            ))
+                        ) : (
+                            <>
+                                expert <br />
+                                creative <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">guidance.</span>
+                            </>
+                        )}
                     </h1>
 
                     <p className="text-lg md:text-xl text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase italic opacity-50" style={{ animationDelay: '0.1s' }}>
-                        nơi mình chia sẻ những khoảnh khắc sáng tạo và <span className="text-accent-primary">chill with...</span>
+                        {meData?.homeText2?.includes('chill with...') ? (
+                            <>
+                                {meData.homeText2.split('chill with...')[0]}
+                                <span className="text-accent-primary">chill with...</span>
+                            </>
+                        ) : (
+                            meData?.homeText2 || "nơi mình chia sẻ những khoảnh khắc sáng tạo và chill with..."
+                        )}
                     </p>
 
                     <div className="flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                        <a href="#shortcuts" className="btn-pill px-10 border-white/5 bg-white/5 hover:bg-accent-primary hover:text-bg-primary">
-                            khám phá dự án <ArrowRight size={14} />
+                        <a href={meData?.homeButtonLink || "#shortcuts"} className="btn-pill px-10 border-white/5 bg-white/5 hover:bg-accent-primary hover:text-bg-primary">
+                            {meData?.homeButtonText || "khám phá dự án"} <ArrowRight size={14} />
                         </a>
                     </div>
                 </div>
@@ -66,7 +87,11 @@ const Home = () => {
                 <div className="w-full md:w-1/2 flex justify-end items-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     <div className="relative w-full max-w-[450px] aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl group">
                         {/* Main Image Clean */}
-                        <img src="/assets/hero-portrait-blue.png" alt="Phat Do" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
+                        <img
+                            src={meData?.heroImage || "/assets/hero-portrait-blue.png"}
+                            alt="Phat Do"
+                            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                        />
 
                         {/* Minimal Gradient for depth */}
                         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg-primary opacity-60"></div>
