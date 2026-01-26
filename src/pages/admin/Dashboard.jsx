@@ -608,7 +608,8 @@ const ProjectsEditor = () => {
                 const { id, ...data } = editing;
                 await updateDoc(doc(db, 'projects', id), data);
             } else {
-                await addDoc(collection(db, 'projects'), editing);
+                const newProject = { ...editing, order: projects.length };
+                await addDoc(collection(db, 'projects'), newProject);
             }
             setEditing(null);
             alert("Đã cập nhật dự án!");
@@ -628,6 +629,31 @@ const ProjectsEditor = () => {
                 console.error(err);
                 alert("Lỗi khi xóa.");
             }
+        }
+    };
+
+    const moveItemFirestore = async (items, index, direction) => {
+        const newIndex = direction === 'up' ? index - 1 : index + 1;
+        if (newIndex < 0 || newIndex >= items.length) return;
+
+        setSaving(true);
+        try {
+            const item1 = items[index];
+            const item2 = items[newIndex];
+
+            // Ensure both have order values, use index as fallback
+            const order1 = item1.order !== undefined ? item1.order : index;
+            const order2 = item2.order !== undefined ? item2.order : newIndex;
+
+            await Promise.all([
+                updateDoc(doc(db, 'projects', item1.id), { order: order2 }),
+                updateDoc(doc(db, 'projects', item2.id), { order: order1 })
+            ]);
+        } catch (err) {
+            console.error("Move error:", err);
+            alert("Lỗi khi sắp xếp.");
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -715,6 +741,10 @@ const ProjectsEditor = () => {
                             </div>
                         </div>
                         <div className="flex gap-2">
+                            <div className="flex flex-col gap-1 mr-2">
+                                <button onClick={() => moveItemFirestore(projects, projects.findIndex(x => x.id === p.id), 'up')} disabled={projects.findIndex(x => x.id === p.id) === 0} className="p-1.5 rounded-lg bg-white/5 text-text-secondary hover:text-white disabled:opacity-0 transition-all"><ArrowUp size={12} /></button>
+                                <button onClick={() => moveItemFirestore(projects, projects.findIndex(x => x.id === p.id), 'down')} disabled={projects.findIndex(x => x.id === p.id) === projects.length - 1} className="p-1.5 rounded-lg bg-white/5 text-text-secondary hover:text-white disabled:opacity-0 transition-all"><ArrowDown size={12} /></button>
+                            </div>
                             <button onClick={() => setEditing(p)} className="p-3 rounded-xl bg-white/5 text-text-secondary hover:text-white hover:bg-white/10 transition-all"><Settings size={16} /></button>
                             <button onClick={() => handleDelete(p.id)} className="p-3 rounded-xl bg-red-500/5 text-red-400/40 hover:text-red-400 hover:bg-red-500/10 transition-all"><Trash2 size={16} /></button>
                         </div>
@@ -726,7 +756,7 @@ const ProjectsEditor = () => {
 };
 
 const MediaEditor = () => {
-    const [subTab, setSubTab] = useState('photos');
+    const [subTab, setSubTab] = useState('visual');
     const { data: items, loading } = useCollection(subTab);
     const [editing, setEditing] = useState(null);
     const [saving, setSaving] = useState(false);
@@ -739,7 +769,8 @@ const MediaEditor = () => {
                 const { id, ...data } = editing;
                 await updateDoc(doc(db, subTab, id), data);
             } else {
-                await addDoc(collection(db, subTab), editing);
+                const newItem = { ...editing, order: items.length };
+                await addDoc(collection(db, subTab), newItem);
             }
             setEditing(null);
             alert("Đã cập nhật!");
@@ -754,6 +785,30 @@ const MediaEditor = () => {
     const handleDelete = async (id) => {
         if (window.confirm("Xóa mục này?")) {
             await deleteDoc(doc(db, subTab, id));
+        }
+    };
+
+    const moveItemFirestore = async (index, direction) => {
+        const newIndex = direction === 'up' ? index - 1 : index + 1;
+        if (newIndex < 0 || newIndex >= items.length) return;
+
+        setSaving(true);
+        try {
+            const item1 = items[index];
+            const item2 = items[newIndex];
+
+            const order1 = item1.order !== undefined ? item1.order : index;
+            const order2 = item2.order !== undefined ? item2.order : newIndex;
+
+            await Promise.all([
+                updateDoc(doc(db, subTab, item1.id), { order: order2 }),
+                updateDoc(doc(db, subTab, item2.id), { order: order1 })
+            ]);
+        } catch (err) {
+            console.error("Move error:", err);
+            alert("Lỗi khi sắp xếp.");
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -774,14 +829,14 @@ const MediaEditor = () => {
                         <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{subTab === 'photos' ? 'Loại (Type)' : 'Vai trò (Role)'}</label>
                         <input type="text" value={editing.type || editing.role || ''} onChange={e => setEditing(subTab === 'photos' ? { ...editing, type: e.target.value } : { ...editing, role: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
                     </div>
-                    {(subTab === 'photos' || subTab === 'crew') && (
+                    {(subTab === 'visual' || subTab === 'crew') && (
                         <div className="space-y-2">
                             <ImageUpload
-                                label={subTab === 'photos' ? "Hình ảnh" : "Hình ảnh Crew"}
-                                multiple={subTab === 'photos'}
-                                currentImage={subTab === 'photos' ? editing.images : editing.images?.[0]}
+                                label={subTab === 'visual' ? "Hình ảnh" : "Hình ảnh Crew"}
+                                multiple={subTab === 'visual'}
+                                currentImage={subTab === 'visual' ? editing.images : editing.images?.[0]}
                                 onUpload={(url_or_urls) => {
-                                    if (subTab === 'photos') {
+                                    if (subTab === 'visual') {
                                         setEditing({ ...editing, images: [...(editing.images || []), ...url_or_urls] });
                                     } else {
                                         setEditing({ ...editing, images: [url_or_urls] });
@@ -790,7 +845,7 @@ const MediaEditor = () => {
                             />
                         </div>
                     )}
-                    {subTab === 'clips' && (
+                    {subTab === 'clip' && (
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Video URL (Embed/Youtube)</label>
                             <input type="text" value={editing.videoUrl || ''} onChange={e => setEditing({ ...editing, videoUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 font-sans" />
@@ -814,7 +869,7 @@ const MediaEditor = () => {
     return (
         <div className="space-y-10 animate-fade-in-up">
             <div className="flex gap-2 p-1 bg-white/5 rounded-2xl w-full md:w-fit mx-auto overflow-x-auto whitespace-nowrap scrollbar-hide">
-                {['photos', 'clips', 'crew'].map(t => (
+                {['visual', 'clip', 'crew'].map(t => (
                     <button key={t} onClick={() => setSubTab(t)} className={`flex-grow md:flex-none px-4 md:px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all ${subTab === t ? 'bg-white text-bg-primary shadow-lg' : 'text-text-secondary hover:text-white'}`}>
                         {t}
                     </button>
@@ -838,6 +893,10 @@ const MediaEditor = () => {
                             <h4 className="font-bold text-white leading-tight mb-1">{item.title || item.organization}</h4>
                             <p className="text-[9px] text-accent-primary uppercase tracking-widest font-black opacity-60">{item.type || item.role}</p>
                             <div className="flex gap-2 mt-4 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                                <div className="flex gap-1 mr-1">
+                                    <button onClick={(e) => { e.stopPropagation(); moveItemFirestore(items.findIndex(x => x.id === item.id), 'up'); }} disabled={items.findIndex(x => x.id === item.id) === 0} className="p-2.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-bg-primary disabled:opacity-0 transition-all"><ArrowUp size={14} /></button>
+                                    <button onClick={(e) => { e.stopPropagation(); moveItemFirestore(items.findIndex(x => x.id === item.id), 'down'); }} disabled={items.findIndex(x => x.id === item.id) === items.length - 1} className="p-2.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-bg-primary disabled:opacity-0 transition-all"><ArrowDown size={14} /></button>
+                                </div>
                                 <button onClick={() => setEditing(item)} className="p-2.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-bg-primary transition-all"><Settings size={14} /></button>
                                 <button onClick={() => handleDelete(item.id)} className="p-2.5 rounded-lg bg-red-400/10 hover:bg-red-500 text-red-400 hover:text-white transition-all"><Trash2 size={14} /></button>
                             </div>

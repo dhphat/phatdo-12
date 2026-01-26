@@ -82,10 +82,10 @@ const ProjectItem = ({ item }) => (
     </div>
 );
 
-const PhotoItem = ({ item }) => (
+const VisualItem = ({ item }) => (
     <div className="group animate-fade-in-up">
         <div className="aspect-[4/5] overflow-hidden rounded-[1.5rem] border border-white/5 mb-4">
-            <img src={item.image} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
+            <img src={item.image || (item.images && item.images[0])} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" />
         </div>
         <div>
             <span className="text-accent-primary font-black text-[9px] uppercase tracking-[0.3em] mb-1 block">/ {item.type}</span>
@@ -143,12 +143,12 @@ const ChillWith = () => {
     const [activeTab, setActiveTab] = useState('project');
 
     const { data: remoteProjects, loading: loadingP } = useCollection('projects');
-    const { data: remotePhotos, loading: loadingPh } = useCollection('photos');
-    const { data: remoteClips, loading: loadingC } = useCollection('clips');
+    const { data: remoteVisuals, loading: loadingPh } = useCollection('visual');
+    const { data: remoteClips, loading: loadingC } = useCollection('clip');
     const { data: remoteCrew, loading: loadingCr } = useCollection('crew');
 
     const projects = remoteProjects.length > 0 ? remoteProjects : staticProjects;
-    const photos = remotePhotos.length > 0 ? remotePhotos : staticPhotos;
+    const visuals = remoteVisuals.length > 0 ? remoteVisuals : staticPhotos;
     const clips = remoteClips.length > 0 ? remoteClips : staticClips;
     const crew = remoteCrew.length > 0 ? remoteCrew : staticCrew;
 
@@ -173,16 +173,16 @@ const ChillWith = () => {
 
             <div className="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-2 md:gap-3 mb-12 md:mb-20 animate-fade-in-up overflow-x-auto pb-6 px-4 scrollbar-hide">
                 <TabButton active={activeTab === 'project'} onClick={() => setActiveTab('project')} icon={Briefcase} label="Project" />
-                <TabButton active={activeTab === 'hinh'} onClick={() => setActiveTab('hinh')} icon={ImageIcon} label="Hình" />
+                <TabButton active={activeTab === 'visual'} onClick={() => setActiveTab('visual')} icon={ImageIcon} label="Visual" />
                 <TabButton active={activeTab === 'clip'} onClick={() => setActiveTab('clip')} icon={Video} label="Clip" />
                 <TabButton active={activeTab === 'crew'} onClick={() => setActiveTab('crew')} icon={Users} label="Crew" />
             </div>
 
             <div className="space-y-12 max-w-5xl mx-auto">
                 {activeTab === 'project' && projects.map(item => <ProjectItem key={item.id} item={item} />)}
-                {activeTab === 'hinh' && (
+                {activeTab === 'visual' && (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        {photos.map(item => <PhotoItem key={item.id} item={item} />)}
+                        {visuals.map(item => <VisualItem key={item.id} item={item} />)}
                     </div>
                 )}
                 {activeTab === 'clip' && (

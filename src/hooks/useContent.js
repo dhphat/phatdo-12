@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
-import { doc, onSnapshot, collection } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, orderBy } from 'firebase/firestore';
 
 /**
  * Hook to fetch global content (meData) from Firestore
@@ -38,7 +38,8 @@ export const useCollection = (collectionName) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const unsub = onSnapshot(collection(db, collectionName), (snapshot) => {
+        const q = query(collection(db, collectionName), orderBy('order', 'asc'));
+        const unsub = onSnapshot(q, (snapshot) => {
             const items = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
