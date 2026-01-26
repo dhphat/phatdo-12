@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #020617;
+  /* Deep Navy/Black */
+  --color-bg-secondary: #0A192F;
+  --color-accent-primary: #00E5FF;
+  /* Electric Blue/Cyan */
+  --color-accent-secondary: #60A5FA;
+  /* Brighter Blue */
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+
+  --font-sans: 'Inter', sans-serif;
+  --background-image-surface-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+@layer base {
+  :root {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    @apply bg-bg-primary text-text-primary antialiased min-h-screen leading-relaxed p-0 cursor-none selection:bg-accent-primary selection:text-bg-primary;
+
+    /* Flashlight effect targeting cyan/blue */
+    background-image:
+      radial-gradient(circle 400px at var(--mouse-x) var(--mouse-y), rgba(0, 229, 255, 0.12), transparent 80%),
+      linear-gradient(to bottom, rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.98)),
+      url('/assets/bg-moss-blue.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    transition: background 0.1s ease-out;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-6xl mx-auto px-6 w-full;
+  }
+
+  .glass-panel {
+    @apply bg-surface-glass backdrop-blur-3xl border border-white/5;
+  }
+
+  .btn-pill {
+    @apply flex items-center justify-center gap-3 px-6 py-2 rounded-full border border-white/10 text-text-primary font-medium text-[13px] transition-all duration-500 hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary;
+  }
+
+  .btn-pill:hover {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+  }
+
+  .nav-link {
+    @apply text-[12px] font-medium tracking-wide text-text-secondary/60 transition-all duration-300 hover:text-accent-primary px-4 py-1.5;
+  }
+
+  .nav-link.active {
+    @apply text-accent-primary font-bold;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
