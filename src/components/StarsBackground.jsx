@@ -23,14 +23,14 @@ const StarsBackground = () => {
         window.addEventListener('resize', resize);
         resize();
 
-        const starCount = 150;
+        const starCount = 250;
         const stars = Array.from({ length: starCount }, () => ({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 1.5 + 0.5,
+            size: Math.random() * 2.0 + 0.5,
             opacity: Math.random(),
             twinkleSpeed: Math.random() * 0.02 + 0.005,
-            baseOpacity: Math.random() * 0.5 + 0.2
+            baseOpacity: Math.random() * 0.7 + 0.3
         }));
 
         const render = () => {
@@ -88,7 +88,6 @@ const StarsBackground = () => {
         <canvas
             ref={canvasRef}
             className="fixed inset-0 pointer-events-none z-0"
-            style={{ filter: 'blur(0.5px)' }}
         />
     );
 };
