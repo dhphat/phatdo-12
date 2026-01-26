@@ -21,7 +21,7 @@ const LoadingScreen = () => {
 
             {/* Minimalist Text */}
             <div className="mt-12 text-center">
-                <p className="text-[11px] font-black tracking-[0.3em] text-accent-primary opacity-60 animate-pulse lowercase italic">
+                <p className="text-xs font-black tracking-[0.3em] text-accent-primary opacity-80 animate-pulse lowercase">
                     phát ơi khách tới nhà kìa
                 </p>
             </div>

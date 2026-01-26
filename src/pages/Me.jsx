@@ -6,7 +6,7 @@ import { meData as staticMeData } from '../data/content';
 
 const TimelineItem = ({ title, place, period, description, index, link }) => (
     <div className="relative pl-8 pb-12 border-l border-white/10 last:pb-0 group" style={{ animationDelay: `${index * 0.1}s` }}>
-        <div className="absolute left-[-21px] top-1.5 w-10 aspect-square rounded-full glass-panel flex items-center justify-center text-accent-primary group-hover:border-accent-primary/50 transition-all duration-500 text-[10px] font-black italic bg-bg-primary">
+        <div className="absolute left-[-21px] top-1.5 w-10 aspect-square rounded-full glass-panel flex items-center justify-center text-accent-primary group-hover:border-accent-primary/50 transition-all duration-500 text-[10px] font-black bg-bg-primary">
             {index + 1}
         </div>
         <h3 className="text-xl font-bold text-white mb-2 group-hover:text-accent-primary transition-colors">{title}</h3>
@@ -82,7 +82,7 @@ const Me = () => {
                     <h1 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter text-white">
                         {meData.meTitle || "về mình."}
                     </h1>
-                    <p className="text-sm md:text-base text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto italic opacity-70 lowercase">
+                    <p className="text-sm md:text-base text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto opacity-70 lowercase">
                         {meData.meSubtitle || "ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo."}
                     </p>
                 </header>
@@ -90,7 +90,7 @@ const Me = () => {
                 <div className="grid lg:grid-cols-2 gap-20 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     {/* Education */}
                     <div>
-                        <h2 className="text-2xl font-black mb-12 flex items-center gap-3 text-white uppercase italic tracking-widest text-[13px] opacity-40">
+                        <h2 className="text-2xl font-black mb-12 flex items-center gap-3 text-white uppercase tracking-widest text-[13px] opacity-40">
                             học vấn
                         </h2>
                         <div className="space-y-2">
@@ -102,7 +102,7 @@ const Me = () => {
 
                     {/* Experience */}
                     <div>
-                        <h2 className="text-2xl font-black mb-12 flex items-center gap-3 text-white uppercase italic tracking-widest text-[13px] opacity-40">
+                        <h2 className="text-2xl font-black mb-12 flex items-center gap-3 text-white uppercase tracking-widest text-[13px] opacity-40">
                             kinh nghiệm
                         </h2>
                         <div className="space-y-2">
@@ -115,7 +115,7 @@ const Me = () => {
 
                 {/* Awards Section */}
                 <section className="mt-32 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                    <h2 className="text-2xl font-black mb-12 text-white uppercase italic tracking-widest text-[13px] opacity-40 text-center">thành tích</h2>
+                    <h2 className="text-2xl font-black mb-12 text-white uppercase tracking-widest text-[13px] opacity-40 text-center">thành tích</h2>
                     <div className="grid md:grid-cols-2 gap-6">
                         {meData.awards?.map((award, index) => (
                             <AwardItem key={index} {...award} />
@@ -124,7 +124,7 @@ const Me = () => {
                 </section>
 
                 <section className="mt-32 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                    <h2 className="text-2xl font-black mb-12 text-white uppercase italic tracking-widest text-[13px] opacity-40">đã từng ghé qua</h2>
+                    <h2 className="text-2xl font-black mb-12 text-white uppercase tracking-widest text-[13px] opacity-40">đã từng ghé qua</h2>
 
                     <div className="flex flex-wrap gap-4 md:gap-6">
                         {randomizedPlaces.map((place, idx) => (

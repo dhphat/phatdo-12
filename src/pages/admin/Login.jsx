@@ -50,7 +50,7 @@ const AdminLogin = () => {
                         <Star size={24} fill="currentColor" />
                     </div>
                     <h1 className="text-3xl font-black text-white mb-2 tracking-tighter">Admin Access</h1>
-                    <p className="text-text-secondary text-sm font-light italic opacity-60">Manage your digital presence</p>
+                    <p className="text-text-secondary text-sm font-light opacity-60">Manage your digital presence</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-6">
@@ -85,7 +85,7 @@ const AdminLogin = () => {
                     </div>
 
                     {error && (
-                        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs italic text-center animate-fade-in-up">
+                        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center animate-fade-in-up">
                             {error}
                         </div>
                     )}

@@ -274,7 +274,7 @@ const ProfileEditor = () => {
         }
     };
 
-    if (loading) return <div className="text-center py-20 opacity-40 animate-pulse italic">Đang tải dữ liệu...</div>;
+    if (loading) return <div className="text-center py-20 opacity-40 animate-pulse">Đang tải dữ liệu...</div>;
 
     return (
         <form onSubmit={handleSave} className="w-full max-w-2xl mx-auto space-y-10 animate-fade-in-up">
@@ -291,7 +291,7 @@ const ProfileEditor = () => {
                 </div>
 
                 <div className="pt-10 border-t border-white/5 space-y-8">
-                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cài đặt Trang chủ</h3>
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white">Cài đặt Trang chủ</h3>
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="space-y-6">
                             <div className="space-y-2">
@@ -331,7 +331,7 @@ const ProfileEditor = () => {
                 </div>
 
                 <div className="pt-10 border-t border-white/5 space-y-8">
-                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cài đặt Trang con (Me & Chill)</h3>
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white">Cài đặt Trang con (Me & Chill)</h3>
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="space-y-6">
                             <div className="space-y-2">
@@ -352,7 +352,7 @@ const ProfileEditor = () => {
                 </div>
 
                 <div className="pt-10 border-t border-white/5 space-y-8">
-                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Trang Liên hệ (Nhau nha)</h3>
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white">Trang Liên hệ (Nhau nha)</h3>
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Nhãn trên cùng (Top Label)</label>
@@ -366,7 +366,7 @@ const ProfileEditor = () => {
                 </div>
 
                 <div className="pt-10 border-t border-white/5 space-y-8">
-                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cấu hình SEO & Chia sẻ</h3>
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white">Cấu hình SEO & Chia sẻ</h3>
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="space-y-6">
                             <p className="text-[10px] text-text-secondary leading-relaxed opacity-60">
@@ -399,7 +399,7 @@ const ProfileEditor = () => {
                 </div>
 
                 <div className="pt-10 border-t border-white/5 space-y-8">
-                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Thông tin Liên hệ (Contact)</h3>
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white">Thông tin Liên hệ (Contact)</h3>
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Số điện thoại</label>
@@ -531,7 +531,7 @@ const BiographyEditor = () => {
         setMeData({ ...meData, [field]: newList });
     };
 
-    if (loading) return <div className="text-center py-20 opacity-40 italic">Đang tải...</div>;
+    if (loading) return <div className="text-center py-20 opacity-40">Đang tải...</div>;
 
     const sections = [
         { key: 'education', label: 'Học vấn', template: { title: '', place: '', period: '', description: '', link: '' } },
@@ -631,7 +631,7 @@ const ProjectsEditor = () => {
         }
     };
 
-    if (loading) return <div className="text-center py-20 opacity-40 animate-pulse italic">Đang tải dự án...</div>;
+    if (loading) return <div className="text-center py-20 opacity-40 animate-pulse">Đang tải dự án...</div>;
 
     if (editing) {
         return (
@@ -711,7 +711,7 @@ const ProjectsEditor = () => {
                             </div>
                             <div>
                                 <h4 className="font-bold text-white group-hover:text-accent-primary transition-colors">{p.title}</h4>
-                                <span className="text-[9px] text-text-secondary uppercase tracking-widest opacity-50 italic">{p.category}</span>
+                                <span className="text-[9px] text-text-secondary uppercase tracking-widest opacity-50">{p.category}</span>
                             </div>
                         </div>
                         <div className="flex gap-2">
@@ -757,7 +757,7 @@ const MediaEditor = () => {
         }
     };
 
-    if (loading) return <div className="text-center py-20 opacity-40 animate-pulse italic">Đang tải...</div>;
+    if (loading) return <div className="text-center py-20 opacity-40 animate-pulse">Đang tải...</div>;
 
     if (editing) {
         return (
@@ -873,7 +873,7 @@ const AdminDashboard = () => {
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-primary"></div>
                     <div className="space-y-2">
                         <span className="block text-xs text-accent-primary font-black uppercase tracking-[0.3em] animate-pulse">Aura Admin Security</span>
-                        <p className="text-[10px] text-text-secondary italic opacity-60">Xác thực quyền truy cập...</p>
+                        <p className="text-[10px] text-text-secondary opacity-60">Xác thực quyền truy cập...</p>
                     </div>
                 </div>
             </div>
@@ -894,7 +894,7 @@ const AdminDashboard = () => {
                 <div className="p-8 mb-4 flex justify-between items-center">
                     <div>
                         <h1 className="text-xl font-black text-white tracking-widest uppercase">Aura CMS</h1>
-                        <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1 italic">phatdo.com</p>
+                        <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1">phatdo.com</p>
                     </div>
                     <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-text-secondary"><Plus className="rotate-45" size={24} /></button>
                 </div>
@@ -921,7 +921,7 @@ const AdminDashboard = () => {
                         </button>
                         <div>
                             <h2 className="text-2xl md:text-4xl font-black tracking-tighter capitalize">{activeTab}</h2>
-                            <div className="flex items-center gap-2 text-[10px] text-text-secondary mt-1 uppercase tracking-widest opacity-40 italic">
+                            <div className="flex items-center gap-2 text-[10px] text-text-secondary mt-1 uppercase tracking-widest opacity-40">
                                 <span className="hidden md:inline">Admin</span> <span className="hidden md:inline"><ChevronRight size={10} /></span> <span>Dashboard</span> <ChevronRight size={10} /> <span className="text-accent-primary font-bold">{activeTab}</span>
                             </div>
                         </div>

@@ -76,7 +76,7 @@ const Home = () => {
                         )}
                     </h1>
 
-                    <p className="text-sm md:text-base text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase italic opacity-70" style={{ animationDelay: '0.1s' }}>
+                    <p className="text-sm md:text-base text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase opacity-70" style={{ animationDelay: '0.1s' }}>
                         {meData?.homeSubtitle?.includes('chill with...') ? (
                             <>
                                 {meData.homeSubtitle.split('chill with...')[0]}

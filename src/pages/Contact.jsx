@@ -10,7 +10,7 @@ const ContactItem = ({ icon: Icon, label, value, href }) => {
                 <Icon size={18} />
             </div>
             <div className="overflow-hidden">
-                <p className="text-[9px] text-text-secondary mb-1 font-black uppercase tracking-widest opacity-40 italic">{label}</p>
+                <p className="text-[9px] text-text-secondary mb-1 font-black uppercase tracking-widest opacity-40">{label}</p>
                 <p className="text-base font-bold text-white group-hover:text-accent-primary transition-colors truncate">{value}</p>
             </div>
         </a>
@@ -54,7 +54,7 @@ const Contact = () => {
                     <h1 className="text-6xl md:text-8xl font-black mb-10 leading-tight tracking-tighter text-white lowercase">
                         nhau nha.
                     </h1>
-                    <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto italic opacity-70 lowercase transition-all">
+                    <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto opacity-70 lowercase transition-all">
                         {meData?.contactSubtitle || "mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ."}
                     </p>
                 </div>
