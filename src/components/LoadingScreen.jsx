@@ -1,7 +1,12 @@
-import React from 'react';
-import { Star } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy } from 'lucide-react';
 
 const LoadingScreen = () => {
+    const HeadlineIcon = useMemo(() => {
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy];
+        return icons[Math.floor(Math.random() * icons.length)];
+    }, []);
+
     return (
         <div className="fixed inset-0 z-[9999] bg-bg-primary flex flex-col items-center justify-center">
             <div className="relative">
@@ -10,7 +15,7 @@ const LoadingScreen = () => {
 
                 {/* Main Logo/Icon */}
                 <div className="relative glass-panel w-20 h-20 rounded-full flex items-center justify-center border-white/5 shadow-2xl animate-float">
-                    <Star size={32} className="text-accent-primary animate-pulse" fill="currentColor" />
+                    <HeadlineIcon size={32} className="text-accent-primary animate-pulse" fill="currentColor" />
                 </div>
             </div>
 
