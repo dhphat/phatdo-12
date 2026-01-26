@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon } from 'lucide-react';
+import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, PalmTree } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
 import { meData as staticMeData } from '../data/content';
@@ -111,44 +111,43 @@ const Me = () => {
                 <section className="mt-32 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
                     <h2 className="text-2xl font-black mb-12 text-white uppercase italic tracking-widest text-[13px] opacity-40">đã từng ghé qua</h2>
 
-                    <div className="flex flex-wrap gap-3">
-                        {meData.places?.map((place, idx) => (
-                            <a
-                                key={idx}
-                                href={place.link || '#'}
-                                target={place.link ? "_blank" : undefined}
-                                rel={place.link ? "noopener noreferrer" : undefined}
-                                className={`
-                                    group relative overflow-hidden px-5 py-3 rounded-2xl border transition-all duration-500
-                                    ${place.type === 'intl'
-                                        ? 'bg-accent-primary/20 border-accent-primary/30 text-accent-primary hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary scale-110'
-                                        : 'bg-white/5 border-white/5 text-text-secondary hover:text-white hover:border-white/20'
-                                    }
-                                    ${place.link ? 'cursor-pointer' : 'cursor-default'}
-                                `}
-                            >
-                                <div className="flex items-center gap-3">
-                                    {place.type === 'intl' ? <Globe size={14} className="opacity-70" /> : <MapPin size={12} className="opacity-40" />}
-                                    <span className={`text-[11px] font-black uppercase tracking-widest ${place.type === 'intl' ? 'tracking-[0.2em]' : ''}`}>
-                                        {place.name}
-                                    </span>
-                                </div>
-                                {place.link && (
-                                    <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-60 transition-opacity">
-                                        <Zap size={8} fill="currentColor" />
-                                    </div>
-                                )}
-                            </a>
-                        ))}
-                    </div>
-
-                    <div className="mt-12 flex items-center gap-8 opacity-40">
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
-                            <span className="w-3 h-3 rounded bg-accent-primary"></span> Quốc tế
-                        </p>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
-                            <span className="w-3 h-3 rounded bg-white/20"></span> Trong nước
-                        </p>
+                    <div className="flex flex-wrap gap-4 md:gap-6">
+                        {React.useMemo(() => {
+                            const iconsList = [Globe, MapPin, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, PalmTree];
+                            return [...(meData.places || [])]
+                                .sort(() => Math.random() - 0.5)
+                                .map((place, idx) => {
+                                    const RandomIcon = iconsList[Math.floor(Math.random() * iconsList.length)];
+                                    return (
+                                        <a
+                                            key={idx}
+                                            href={place.link || '#'}
+                                            target={place.link ? "_blank" : undefined}
+                                            rel={place.link ? "noopener noreferrer" : undefined}
+                                            className={`
+                                                group relative overflow-hidden px-6 py-4 rounded-2xl border transition-all duration-500
+                                                ${place.type === 'intl'
+                                                    ? 'bg-accent-primary/20 border-accent-primary/30 text-accent-primary hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary scale-110 z-10'
+                                                    : 'bg-white/[0.08] border-white/10 text-text-secondary hover:text-white hover:border-white/30 hover:bg-white/10'
+                                                }
+                                                ${place.link ? 'cursor-pointer' : 'cursor-default'}
+                                            `}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <RandomIcon size={place.type === 'intl' ? 16 : 14} className={place.type === 'intl' ? 'opacity-80' : 'opacity-50'} />
+                                                <span className={`text-[11px] font-black uppercase tracking-widest ${place.type === 'intl' ? 'tracking-[0.2em]' : ''}`}>
+                                                    {place.name}
+                                                </span>
+                                            </div>
+                                            {place.link && (
+                                                <div className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <Zap size={8} fill="currentColor" className="text-accent-secondary" />
+                                                </div>
+                                            )}
+                                        </a>
+                                    );
+                                });
+                        }, [meData.places])}
                     </div>
                 </section>
             </div>
