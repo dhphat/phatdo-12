@@ -104,7 +104,7 @@ const Home = () => {
                     <div className="relative w-full max-w-[450px] aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl group">
                         {/* Main Image Clean */}
                         <img
-                            src={meData?.heroImage || "/assets/hero-portrait-blue.png"}
+                            src={meData?.heroImage || "/assets/hero-portrait-phat.jpg"}
                             alt="Phat Do"
                             className="w-full h-full object-cover grayscale hover:grayscale-0 active:grayscale-0 transition-all duration-1000 group-hover:scale-105 active:scale-105"
                         />
