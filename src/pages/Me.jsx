@@ -46,7 +46,9 @@ const Me = () => {
                         <div className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-accent-primary">
                             <Zap size={14} fill="currentColor" />
                         </div>
-                        <h4 className="text-accent-primary font-bold tracking-[0.4em] text-[11px] uppercase">creative identity</h4>
+                        <h4 className="text-accent-primary font-bold tracking-[0.4em] text-[11px] uppercase">
+                            {meData.headline || "creative identity"}
+                        </h4>
                     </div>
                     <h1 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter text-white">
                         {meData.meTitle || "về mình."}
@@ -54,6 +56,13 @@ const Me = () => {
                     <p className="text-lg md:text-xl text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto italic opacity-60">
                         {meData.meSubtitle || "ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo."}
                     </p>
+                    {meData.bio && (
+                        <div className="mt-12 p-8 md:p-12 glass-panel rounded-[2.5rem] border-white/5 bg-white/[0.01] animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                            <p className="text-xl md:text-2xl text-text-primary leading-relaxed font-light italic text-center">
+                                "{meData.bio}"
+                            </p>
+                        </div>
+                    )}
                 </header>
 
                 <div className="grid lg:grid-cols-2 gap-20 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
