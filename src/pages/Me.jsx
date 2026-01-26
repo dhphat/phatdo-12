@@ -131,8 +131,8 @@ const Me = () => {
                                 className={`
                                     group relative overflow-hidden px-6 py-4 rounded-2xl border transition-all duration-500
                                     ${place.type === 'intl'
-                                        ? 'bg-accent-primary/20 border-accent-primary/30 text-accent-primary hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary scale-110 z-10'
-                                        : 'bg-white/[0.08] border-white/10 text-text-secondary hover:text-white hover:border-white/30 hover:bg-white/10'
+                                        ? 'bg-accent-primary/20 border-accent-primary/30 text-accent-primary hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary z-10'
+                                        : 'bg-white/[0.08] border-white/10 text-text-secondary hover:text-white hover:border-white/40 hover:bg-white/20'
                                     }
                                     ${place.link ? 'cursor-pointer' : 'cursor-default'}
                                 `}
