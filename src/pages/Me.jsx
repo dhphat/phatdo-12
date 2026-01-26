@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link } from 'lucide-react';
+import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
 import { meData as staticMeData } from '../data/content';
@@ -11,16 +11,18 @@ const TimelineItem = ({ title, place, period, description, index, link }) => (
         </div>
         <h3 className="text-xl font-bold text-white mb-2 group-hover:text-accent-primary transition-colors">{title}</h3>
         <div className="flex items-center gap-2 text-[10px] text-accent-secondary mb-3 font-black uppercase tracking-[0.2em] opacity-60">
-            <span>{place}</span>
+            <span className="flex items-center gap-1.5">
+                {place}
+                {link && (
+                    <a href={link} target="_blank" rel="noopener noreferrer" className="text-accent-primary hover:text-white transition-colors cursor-pointer p-1">
+                        <LinkIcon size={10} />
+                    </a>
+                )}
+            </span>
             <span>•</span>
             <span>{period}</span>
         </div>
-        <p className="text-sm text-text-secondary leading-loose font-light mb-4">{description}</p>
-        {link && (
-            <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-accent-primary hover:text-white transition-colors group/link p-2 bg-white/5 rounded-lg border border-white/5 hover:border-accent-primary/30">
-                <Link size={10} className="group-hover/link:rotate-12 transition-transform" /> xem tham chiếu
-            </a>
-        )}
+        <p className="text-sm text-text-secondary leading-loose font-light">{description}</p>
     </div>
 );
 
@@ -30,14 +32,16 @@ const AwardItem = ({ title, place, period, description, link }) => (
             <Award size={24} />
         </div>
         <div className="flex-grow">
-            <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
+            <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                {title}
+                {link && (
+                    <a href={link} target="_blank" rel="noopener noreferrer" className="text-accent-secondary hover:text-white transition-colors p-1">
+                        <LinkIcon size={12} />
+                    </a>
+                )}
+            </h3>
             <p className="text-[10px] text-accent-primary font-black uppercase tracking-widest opacity-60 mb-2">{place} • {period}</p>
-            <p className="text-xs text-text-secondary font-light leading-relaxed mb-4">{description}</p>
-            {link && (
-                <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-accent-secondary hover:text-white transition-colors p-2 bg-white/5 rounded-lg border border-white/5">
-                    <Link size={10} /> tham chiếu
-                </a>
-            )}
+            <p className="text-xs text-text-secondary font-light leading-relaxed">{description}</p>
         </div>
     </div>
 );
