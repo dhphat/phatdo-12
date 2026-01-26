@@ -29,7 +29,11 @@ const ProfileEditor = () => {
 
     useEffect(() => {
         if (remoteData) {
-            setMeData(remoteData);
+            setMeData({
+                headline: remoteData.headline || '',
+                bio: remoteData.bio || '',
+                roles: remoteData.roles || []
+            });
         }
     }, [remoteData]);
 
@@ -73,7 +77,7 @@ const ProfileEditor = () => {
                 <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Danh sách vị trí (Roles)</label>
                     <div className="space-y-3">
-                        {meData.roles.map((role, idx) => (
+                        {meData?.roles?.map((role, idx) => (
                             <div key={idx} className="flex gap-3">
                                 <input
                                     type="text"
@@ -184,7 +188,7 @@ const BiographyEditor = () => {
                         </button>
                     </div>
                     <div className="grid gap-4">
-                        {meData[section.key].map((item, idx) => (
+                        {meData[section.key]?.map((item, idx) => (
                             <div key={idx} className="bg-white/5 p-6 rounded-2xl border border-white/5 space-y-4 relative group">
                                 <button type="button" onClick={() => removeItem(section.key, idx)} className="absolute top-4 right-4 p-2 text-red-400/40 hover:text-red-400 transition-colors">
                                     <Trash2 size={14} />
@@ -325,7 +329,7 @@ const ProjectsEditor = () => {
                 </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {projects.map(p => (
+                {projects?.map(p => (
                     <div key={p.id} className="glass-panel p-6 rounded-3xl flex items-center justify-between group hover:border-accent-primary/20 transition-all">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden p-2 ring-1 ring-white/5">
@@ -436,7 +440,7 @@ const MediaEditor = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {items.map(item => (
+                {items?.map(item => (
                     <div key={item.id} className="glass-panel group relative rounded-2xl overflow-hidden border-white/5 hover:border-accent-primary/20 transition-all aspect-[4/5]">
                         {(item.image || item.images) && (
                             <img src={item.image || item.images[0]} alt="" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
