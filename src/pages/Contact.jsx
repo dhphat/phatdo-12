@@ -5,7 +5,7 @@ import { useMeData } from '../hooks/useContent';
 const ContactItem = ({ icon: Icon, label, value, href }) => {
     if (!value) return null;
     return (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-6 glass-panel rounded-2xl hover:bg-white/[0.03] transition-all group border border-white/5 hover:border-accent-primary/20 hover:-translate-y-1">
+        <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-6 glass-panel rounded-2xl hover:bg-white/[0.03] active:bg-white/[0.05] active:scale-[0.98] active:translate-y-0 transition-all group border border-white/5 hover:border-accent-primary/20 hover:-translate-y-1">
             <div className="p-3 rounded-full bg-white/5 text-accent-primary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(242,254,119,0.1)]">
                 <Icon size={18} />
             </div>
@@ -38,7 +38,7 @@ const Contact = () => {
     }, []);
 
     return (
-        <div className="container min-h-screen py-48 md:py-64 flex flex-col justify-center">
+        <div className="container min-h-screen pt-40 pb-48 md:py-64 flex flex-col justify-center">
             <div className="max-w-4xl mx-auto w-full">
                 {/* Header */}
                 <div className="mb-24 animate-fade-in-up text-center">
@@ -52,7 +52,7 @@ const Contact = () => {
                     </div>
 
                     <h1 className="text-6xl md:text-8xl font-black mb-10 leading-tight tracking-tighter text-white lowercase">
-                        nhau nha.
+                        nhau nha
                     </h1>
                     <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto opacity-70 lowercase transition-all">
                         {meData?.contactSubtitle || "mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ."}

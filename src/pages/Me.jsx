@@ -14,7 +14,7 @@ const TimelineItem = ({ title, place, period, description, index, link }) => (
             <span className="flex items-center gap-1.5">
                 {place}
                 {link && (
-                    <a href={link} target="_blank" rel="noopener noreferrer" className="text-accent-primary hover:text-white transition-colors cursor-pointer p-1">
+                    <a href={link} target="_blank" rel="noopener noreferrer" className="text-accent-primary hover:text-white active:scale-125 transition-all cursor-pointer p-1">
                         <LinkIcon size={10} />
                     </a>
                 )}
@@ -35,7 +35,7 @@ const AwardItem = ({ title, place, period, description, link }) => (
             <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
                 {title}
                 {link && (
-                    <a href={link} target="_blank" rel="noopener noreferrer" className="text-accent-secondary hover:text-white transition-colors p-1">
+                    <a href={link} target="_blank" rel="noopener noreferrer" className="text-accent-secondary hover:text-white active:scale-125 transition-all p-1">
                         <LinkIcon size={12} />
                     </a>
                 )}
@@ -68,10 +68,10 @@ const Me = () => {
     // Global loading is handled by App.jsx level synchronization
 
     return (
-        <div className="container min-h-screen pt-52 pb-40 md:py-56">
+        <div className="container min-h-screen pt-44 pb-40 md:py-56">
             <div className="max-w-5xl mx-auto">
-                <header className="mb-24 text-center">
-                    <div className="flex items-center justify-center gap-2 mb-8 mx-auto">
+                <header className="mb-20 text-center">
+                    <div className="flex items-center justify-center gap-2 mb-4 mx-auto">
                         <div className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-accent-primary">
                             <HeadlineIcon size={12} fill="currentColor" />
                         </div>
@@ -157,8 +157,8 @@ const Me = () => {
                         ))}
                     </div>
                 </section>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

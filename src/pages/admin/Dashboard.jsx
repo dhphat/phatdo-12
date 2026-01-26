@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { doc, setDoc, collection, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useMeData, useCollection } from '../../hooks/useContent';
-import { Settings, Image, Layout as LayoutIcon, LogOut, ChevronRight, Plus, Save, Trash2, Upload, Link, Video as VideoIcon, Globe, MapPin, BookOpen, ArrowUp, ArrowDown } from 'lucide-react';
+import { Settings, Image, Layout as LayoutIcon, LogOut, ChevronRight, Plus, Save, Trash2, Upload, Link, Video as VideoIcon, Globe, MapPin, BookOpen, ArrowUp, ArrowDown, ListOrdered } from 'lucide-react';
 
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -656,6 +656,20 @@ const ProjectsEditor = () => {
             setSaving(false);
         }
     };
+    const fixOrders = async () => {
+        if (!window.confirm("Đặt lại thứ tự cho toàn bộ danh sách dự án dựa trên vị trí hiện tại?")) return;
+        setSaving(true);
+        try {
+            const batch = projects.map((p, idx) => updateDoc(doc(db, 'projects', p.id), { order: idx }));
+            await Promise.all(batch);
+            alert("Đã đặt lại thứ tự dự án!");
+        } catch (err) {
+            console.error(err);
+            alert("Lỗi khi đặt lại thứ tự.");
+        } finally {
+            setSaving(false);
+        }
+    };
 
     if (loading) return <div className="text-center py-20 opacity-40 animate-pulse">Đang tải dự án...</div>;
 
@@ -724,9 +738,14 @@ const ProjectsEditor = () => {
         <div className="space-y-6 animate-fade-in-up">
             <div className="flex justify-between items-center mb-10">
                 <h3 className="text-xl font-bold text-white">Danh sách dự án</h3>
-                <button onClick={() => setEditing({ title: '', category: '', description: '', logo: '', websiteUrl: '', videoUrl: '', images: [] })} className="btn-pill px-6 py-3 bg-white/5 hover:bg-white/10 text-white border-white/10 flex items-center gap-2">
-                    <Plus size={16} /> Thêm mới
-                </button>
+                <div className="flex gap-2">
+                    <button onClick={fixOrders} disabled={saving} title="Đặt lại thứ tự theo danh sách hiện tại" className="btn-pill px-4 py-3 bg-white/5 hover:bg-accent-primary/20 text-text-secondary hover:text-accent-primary border-white/10">
+                        <ListOrdered size={16} />
+                    </button>
+                    <button onClick={() => setEditing({ title: '', category: '', description: '', logo: '', websiteUrl: '', videoUrl: '', images: [] })} className="btn-pill px-6 py-3 bg-white/5 hover:bg-white/10 text-white border-white/10 flex items-center gap-2">
+                        <Plus size={16} /> Thêm mới
+                    </button>
+                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {projects?.map(p => (
@@ -812,6 +831,22 @@ const MediaEditor = () => {
         }
     };
 
+    const fixOrders = async () => {
+        if (!window.confirm(`Đặt lại thứ tự cho toàn bộ ${subTab} dựa trên vị trí hiện tại?`)) return;
+        setSaving(true);
+        try {
+            const batch = items.map((it, idx) => updateDoc(doc(db, subTab, it.id), { order: idx }));
+            await Promise.all(batch);
+            alert("Đã đặt lại thứ tự!");
+        } catch (err) {
+            console.error(err);
+            alert("Lỗi khi đặt lại thứ tự.");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+
     if (loading) return <div className="text-center py-20 opacity-40 animate-pulse">Đang tải...</div>;
 
     if (editing) {
@@ -826,8 +861,8 @@ const MediaEditor = () => {
                         <input type="text" value={editing.title || editing.organization || ''} onChange={e => setEditing(subTab === 'crew' ? { ...editing, organization: e.target.value } : { ...editing, title: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" required />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{subTab === 'photos' ? 'Loại (Type)' : 'Vai trò (Role)'}</label>
-                        <input type="text" value={editing.type || editing.role || ''} onChange={e => setEditing(subTab === 'photos' ? { ...editing, type: e.target.value } : { ...editing, role: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
+                        <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{subTab === 'visual' ? 'Loại (Type)' : 'Vai trò (Role)'}</label>
+                        <input type="text" value={editing.type || editing.role || ''} onChange={e => setEditing(subTab === 'visual' ? { ...editing, type: e.target.value } : { ...editing, role: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
                     </div>
                     {(subTab === 'visual' || subTab === 'crew') && (
                         <div className="space-y-2">
@@ -878,9 +913,14 @@ const MediaEditor = () => {
 
             <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-white capitalize">{subTab}</h3>
-                <button onClick={() => setEditing({})} className="btn-pill px-6 py-3 border-white/10 flex items-center gap-2 text-white">
-                    <Plus size={16} /> Thêm mới
-                </button>
+                <div className="flex gap-2">
+                    <button onClick={fixOrders} disabled={saving} title="Đặt lại thứ tự theo danh sách hiện tại" className="btn-pill px-4 py-3 bg-white/5 hover:bg-accent-primary/20 text-text-secondary hover:text-accent-primary border-white/10">
+                        <ListOrdered size={16} />
+                    </button>
+                    <button onClick={() => setEditing({})} className="btn-pill px-6 py-3 border-white/10 flex items-center gap-2 text-white">
+                        <Plus size={16} /> Thêm {subTab}
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

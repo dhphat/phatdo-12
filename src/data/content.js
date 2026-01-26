@@ -57,13 +57,13 @@ export const projects = [
     }
 ];
 
-export const photos = [
+export const visual = [
     { id: 1, title: 'saigon nights poster', type: 'poster', image: 'https://images.unsplash.com/photo-1559592413-7cec430aa34f?q=80&w=800&auto=format&fit=crop' },
     { id: 2, title: 'summer collection kv', type: 'key visual', image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=800&auto=format&fit=crop' },
     { id: 3, title: 'indie music fest flyer', type: 'ấn phẩm', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop' }
 ];
 
-export const clips = [
+export const clip = [
     {
         id: 1,
         title: 'showreel 2023',

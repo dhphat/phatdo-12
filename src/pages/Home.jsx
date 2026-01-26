@@ -26,7 +26,7 @@ const Home = () => {
     return (
         <div className="min-h-screen flex items-center overflow-hidden">
             {/* Hero Section - Single Full Screen Screen */}
-            <section className="container flex flex-col md:flex-row items-center justify-between gap-12 py-20 relative">
+            <section className="container flex flex-col md:flex-row items-center justify-between gap-12 pt-44 pb-20 md:py-20 relative">
 
                 {/* Left Side: Content */}
                 <div className="w-full md:w-1/2 z-10 transition-all duration-700">
@@ -93,7 +93,7 @@ const Home = () => {
                     </p>
 
                     <div className="flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                        <a href={meData?.homeButtonLink || "#shortcuts"} className="btn-pill px-10 border-white/5 bg-white/5 hover:bg-accent-primary hover:text-bg-primary">
+                        <a href={meData?.homeButtonLink || "#shortcuts"} className="btn-pill px-10 border-white/5 bg-white/5 hover:bg-accent-primary hover:text-bg-primary active:scale-95 transition-all">
                             {meData?.homeButtonText || "khám phá dự án"} <ArrowRight size={14} />
                         </a>
                     </div>

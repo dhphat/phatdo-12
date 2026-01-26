@@ -31,7 +31,7 @@ const Navbar = () => {
                         <Link
                             key={link.path}
                             to={link.path}
-                            className={`nav-link rounded-full lowercase ${location.pathname === link.path ? 'active bg-white/5' : ''}`}
+                            className={`nav-link rounded-full lowercase active:scale-95 transition-all ${location.pathname === link.path ? 'active bg-white/5' : ''}`}
                         >
                             {link.label}
                         </Link>
@@ -46,13 +46,17 @@ const Navbar = () => {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="absolute top-full left-0 right-0 bg-bg-secondary/95 backdrop-blur-3xl border-b border-white/5 p-6 md:hidden flex flex-col items-center space-y-6 animate-fade-in-up">
-                    {navLinks.map((link) => (
+                <div className="absolute top-0 left-0 right-0 h-screen bg-bg-primary/95 backdrop-blur-[50px] z-50 flex flex-col items-center justify-center space-y-8 animate-fade-in">
+                    <button className="absolute top-8 right-8 text-text-primary w-12 h-12 rounded-full glass-panel flex items-center justify-center active:scale-95 transition-all" onClick={() => setIsMobileMenuOpen(false)}>
+                        <X size={24} />
+                    </button>
+                    {navLinks.map((link, idx) => (
                         <Link
                             key={link.path}
                             to={link.path}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`text-lg font-bold lowercase ${location.pathname === link.path ? 'text-accent-primary' : 'text-text-secondary'}`}
+                            className={`text-4xl font-black lowercase tracking-tighter active:scale-95 transition-all animate-fade-in-up ${location.pathname === link.path ? 'text-accent-primary' : 'text-text-secondary/60 hover:text-white'}`}
+                            style={{ animationDelay: `${idx * 0.1}s` }}
                         >
                             {link.label}
                         </Link>

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Briefcase, Image as ImageIcon, Video, Users, ExternalLink, Play, ArrowRight, Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy } from 'lucide-react';
 import { useMeData, useCollection } from '../hooks/useContent';
-import { projects as staticProjects, photos as staticPhotos, clips as staticClips, crew as staticCrew } from '../data/content';
+import { projects as staticProjects, visual as staticVisuals, clip as staticClips, crew as staticCrew } from '../data/content';
 
 const PageHeader = ({ title, subtitle, headline, headlineIcon: HeadlineIcon }) => (
     <div className="mb-12 md:mb-20 animate-fade-in-up text-center px-4">
@@ -23,7 +23,7 @@ const PageHeader = ({ title, subtitle, headline, headlineIcon: HeadlineIcon }) =
 const TabButton = ({ active, onClick, icon: Icon, label }) => (
     <button
         onClick={onClick}
-        className={`flex items-center gap-3 px-8 py-3 rounded-full border transition-all duration-500 font-bold tracking-widest uppercase text-[11px] ${active
+        className={`flex items-center gap-3 px-8 py-3 rounded-full border transition-all duration-500 font-bold tracking-widest uppercase text-[11px] active:scale-95 ${active
             ? 'bg-accent-primary text-bg-primary border-accent-primary shadow-[0_0_20px_rgba(0,229,255,0.3)] scale-105'
             : 'bg-white/5 text-text-secondary border-white/5 hover:text-white hover:bg-white/10'
             }`}
@@ -52,13 +52,13 @@ const ProjectItem = ({ item }) => (
                 </div>
                 <div className="space-y-4 text-center lg:text-left">
                     {item.websiteUrl && (
-                        <a href={item.websiteUrl} target="_blank" rel="noreferrer" className="flex items-center justify-between text-accent-primary hover:text-white transition-colors font-black uppercase text-[9px] tracking-[0.2em] bg-white/5 p-3 rounded-xl border border-white/5">
+                        <a href={item.websiteUrl} target="_blank" rel="noreferrer" className="flex items-center justify-between text-accent-primary hover:text-white active:scale-95 transition-all font-black uppercase text-[9px] tracking-[0.2em] bg-white/5 p-3 rounded-xl border border-white/5">
                             visit project <ArrowRight size={14} />
                         </a>
                     )}
                     <div className="flex flex-wrap gap-1.5">
                         {item.otherLinks?.map((link, idx) => (
-                            <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="text-[8px] text-text-secondary hover:text-white transition-colors uppercase font-black tracking-widest px-2 py-1.5 rounded-lg bg-white/5 border border-white/5">
+                            <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="text-[8px] text-text-secondary hover:text-white active:scale-95 transition-all uppercase font-black tracking-widest px-2 py-1.5 rounded-lg bg-white/5 border border-white/5">
                                 {link.name}
                             </a>
                         ))}
@@ -111,7 +111,7 @@ const ClipItem = ({ item }) => (
                 <p className="text-sm text-text-secondary leading-relaxed font-light mb-4 lowercase opacity-60">{item.description}</p>
                 <div className="flex gap-2">
                     {item.otherLinks?.map((link, idx) => (
-                        <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[8px] text-text-secondary hover:text-accent-primary transition-colors uppercase font-black tracking-widest px-3 py-2 rounded-lg bg-white/5 border border-white/5">
+                        <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[8px] text-text-secondary hover:text-accent-primary active:scale-95 transition-all uppercase font-black tracking-widest px-3 py-2 rounded-lg bg-white/5 border border-white/5">
                             {link.name} <ExternalLink size={10} />
                         </a>
                     ))}
@@ -129,7 +129,7 @@ const CrewItem = ({ item }) => (
             <p className="text-base text-text-secondary leading-relaxed font-light mb-6 lowercase opacity-80">{item.description}</p>
             <div className="flex gap-3">
                 {item.otherLinks?.map((link, idx) => (
-                    <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[9px] text-accent-primary hover:text-white transition-colors uppercase font-black tracking-widest px-4 py-2 rounded-xl bg-white/5 border border-white/5">
+                    <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[9px] text-accent-primary hover:text-white active:scale-95 transition-all uppercase font-black tracking-widest px-4 py-2 rounded-xl bg-white/5 border border-white/5">
                         {link.name} <ArrowRight size={12} />
                     </a>
                 ))}
@@ -148,7 +148,7 @@ const ChillWith = () => {
     const { data: remoteCrew, loading: loadingCr } = useCollection('crew');
 
     const projects = remoteProjects.length > 0 ? remoteProjects : staticProjects;
-    const visuals = remoteVisuals.length > 0 ? remoteVisuals : staticPhotos;
+    const visuals = remoteVisuals.length > 0 ? remoteVisuals : staticVisuals;
     const clips = remoteClips.length > 0 ? remoteClips : staticClips;
     const crew = remoteCrew.length > 0 ? remoteCrew : staticCrew;
 
