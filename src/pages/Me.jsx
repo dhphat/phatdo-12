@@ -124,7 +124,7 @@ const Me = () => {
                 </section>
 
                 <section className="mt-32 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                    <h2 className="text-2xl font-black mb-12 text-white uppercase tracking-widest text-[13px] opacity-40">đã từng ghé qua</h2>
+                    <h2 className="text-2xl font-black mb-12 text-white uppercase tracking-widest text-[13px] opacity-40">50K di chuyển lộn xộn</h2>
 
                     <div className="flex flex-wrap gap-4 md:gap-6">
                         {randomizedPlaces.map((place, idx) => (
