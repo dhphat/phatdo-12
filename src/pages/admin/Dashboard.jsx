@@ -78,6 +78,56 @@ const ImageUpload = ({ onUpload, label, currentImage, multiple = false }) => {
     );
 };
 
+const LinkEditor = ({ links = [], onChange, label }) => {
+    const addLink = () => onChange([...links, { name: '', url: '' }]);
+    const removeLink = (idx) => onChange(links.filter((_, i) => i !== idx));
+    const updateLink = (idx, field, value) => {
+        const newLinks = [...links];
+        newLinks[idx] = { ...newLinks[idx], [field]: value };
+        onChange(newLinks);
+    };
+
+    return (
+        <div className="space-y-4">
+            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{label}</label>
+            <div className="space-y-3">
+                {links.map((link, idx) => (
+                    <div key={idx} className="flex gap-2 group">
+                        <input
+                            type="text"
+                            placeholder="Nhãn (VD: Facebook)"
+                            value={link.name}
+                            onChange={(e) => updateLink(idx, 'name', e.target.value)}
+                            className="w-1/3 bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:outline-none focus:border-accent-primary/30 transition-all font-bold"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Đường dẫn (URL)"
+                            value={link.url}
+                            onChange={(e) => updateLink(idx, 'url', e.target.value)}
+                            className="flex-grow bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:outline-none focus:border-accent-primary/30 transition-all font-sans"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => removeLink(idx)}
+                            className="p-3 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 transition-all border border-red-500/10 hover:text-white"
+                        >
+                            <Trash2 size={14} />
+                        </button>
+                    </div>
+                ))}
+                <button
+                    type="button"
+                    onClick={addLink}
+                    className="w-full py-3 rounded-xl border border-dashed border-white/10 text-[9px] font-black uppercase tracking-widest text-text-secondary hover:border-accent-primary/50 hover:text-accent-primary transition-all flex items-center justify-center gap-2"
+                >
+                    <Plus size={12} /> Thêm đường dẫn (Facebook, Social, Tags...)
+                </button>
+            </div>
+        </div>
+    );
+};
+
 const ProfileEditor = () => {
     const { data: remoteData, loading } = useMeData();
     const [meData, setMeData] = useState({
@@ -449,6 +499,13 @@ const ProjectsEditor = () => {
                             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Website URL</label>
                             <input type="text" value={editing.websiteUrl} onChange={e => setEditing({ ...editing, websiteUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 font-sans" />
                         </div>
+                        <div className="pt-4">
+                            <LinkEditor
+                                label="Các đường dẫn khác"
+                                links={editing.otherLinks}
+                                onChange={(newLinks) => setEditing({ ...editing, otherLinks: newLinks })}
+                            />
+                        </div>
                     </div>
                     <div className="space-y-6">
                         <div className="space-y-2">
@@ -572,6 +629,13 @@ const MediaEditor = () => {
                             <input type="text" value={editing.videoUrl || ''} onChange={e => setEditing({ ...editing, videoUrl: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 font-sans" />
                         </div>
                     )}
+                    <div className="pt-4 border-t border-white/5">
+                        <LinkEditor
+                            label="Các đường dẫn liên quan (Facebook, Tag người đồng hành...)"
+                            links={editing.otherLinks}
+                            onChange={(newLinks) => setEditing({ ...editing, otherLinks: newLinks })}
+                        />
+                    </div>
                     <button type="submit" disabled={saving} className="w-full btn-pill py-5 bg-accent-primary text-bg-primary font-black uppercase tracking-widest mt-4">
                         {saving ? "Đang lưu..." : "Lưu thay đổi"}
                     </button>
