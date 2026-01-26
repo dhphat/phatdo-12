@@ -161,7 +161,9 @@ const ProfileEditor = () => {
                 meSubtitle: remoteData.meSubtitle || 'ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo.',
                 chillTitle: remoteData.chillTitle || 'chill với...',
                 chillSubtitle: remoteData.chillSubtitle || 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
-                ogImage: remoteData.ogImage || '/assets/hero-portrait-blue.png'
+                ogImage: remoteData.ogImage || '/assets/hero-portrait-blue.png',
+                siteTitle: remoteData.siteTitle || 'Phat Do | Creative Designer & Consultant',
+                faviconUrl: remoteData.faviconUrl || '/vite.svg'
             });
         }
     }, [remoteData]);

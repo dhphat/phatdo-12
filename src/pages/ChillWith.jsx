@@ -5,7 +5,7 @@ import { projects as staticProjects, photos as staticPhotos, clips as staticClip
 
 const PageHeader = ({ title, subtitle }) => (
     <div className="mb-20 animate-fade-in-up text-center">
-        <h1 className="text-6xl md:text-8xl font-black mb-8 text-white tracking-tighter uppercase">{title}</h1>
+        <h1 className="text-6xl md:text-8xl font-black mb-8 text-white tracking-tighter lowercase">{title}</h1>
         <p className="text-lg md:text-xl text-text-secondary max-w-3xl font-light leading-relaxed mx-auto italic opacity-60 lowercase">{subtitle}</p>
     </div>
 );
