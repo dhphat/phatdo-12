@@ -485,8 +485,8 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-bg-primary flex">
-            <aside className="w-64 border-r border-white/5 bg-bg-primary/50 backdrop-blur-3xl flex flex-col fixed inset-y-0 left-0">
+        <div className="min-h-screen bg-transparent flex">
+            <aside className="w-64 border-r border-white/5 bg-bg-primary/30 backdrop-blur-2xl flex flex-col fixed inset-y-0 left-0">
                 <div className="p-8 mb-4">
                     <h1 className="text-xl font-black text-white tracking-widest uppercase">Aura CMS</h1>
                     <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1 italic">phatdo.com</p>
@@ -505,7 +505,7 @@ const AdminDashboard = () => {
                 </div>
             </aside>
 
-            <main className="flex-grow ml-64 p-12 overflow-y-auto">
+            <main className="flex-grow ml-64 p-12 overflow-y-auto bg-transparent">
                 <header className="mb-12 flex justify-between items-center text-white">
                     <div>
                         <h2 className="text-4xl font-black tracking-tighter capitalize">{activeTab}</h2>
