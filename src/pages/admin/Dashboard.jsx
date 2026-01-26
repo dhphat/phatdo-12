@@ -194,16 +194,6 @@ const ProfileEditor = () => {
                         placeholder="VD: creative identity"
                     />
                 </div>
-                <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Mô tả ngắn (Bio) - Hiển thị đoạn giới thiệu ở trang 'Về mình'</label>
-                    <textarea
-                        value={meData.bio}
-                        onChange={(e) => setMeData({ ...meData, bio: e.target.value })}
-                        rows={3}
-                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30 focus:bg-white/[0.08] transition-all font-light leading-relaxed italic"
-                        placeholder="Viết một đoạn ngắn giới thiệu bản thân..."
-                    />
-                </div>
 
                 <div className="pt-10 border-t border-white/5 space-y-8">
                     <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Cài đặt Trang chủ</h3>

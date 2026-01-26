@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Briefcase, Image as ImageIcon, Video, Users, ExternalLink, Play, ArrowRight } from 'lucide-react';
-import { useCollection } from '../hooks/useContent';
+import { useMeData, useCollection } from '../hooks/useContent';
 import { projects as staticProjects, photos as staticPhotos, clips as staticClips, crew as staticCrew } from '../data/content';
 
 const PageHeader = ({ title, subtitle }) => (
