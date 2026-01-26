@@ -1,19 +1,25 @@
 import React from 'react';
 import { Phone, Mail, Facebook, Instagram, Star, Zap } from 'lucide-react';
+import { useMeData } from '../hooks/useContent';
 
-const ContactItem = ({ icon: Icon, label, value, href }) => (
-    <a href={href} className="flex items-center gap-5 p-6 glass-panel rounded-2xl hover:bg-white/[0.03] transition-all group border border-white/5 hover:border-accent-primary/20 hover:-translate-y-1">
-        <div className="p-3 rounded-full bg-white/5 text-accent-primary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(242,254,119,0.1)]">
-            <Icon size={18} />
-        </div>
-        <div>
-            <p className="text-[9px] text-text-secondary mb-1 font-black uppercase tracking-widest opacity-40 italic">{label}</p>
-            <p className="text-base font-bold text-white group-hover:text-accent-primary transition-colors">{value}</p>
-        </div>
-    </a>
-);
+const ContactItem = ({ icon: Icon, label, value, href }) => {
+    if (!value) return null;
+    return (
+        <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-6 glass-panel rounded-2xl hover:bg-white/[0.03] transition-all group border border-white/5 hover:border-accent-primary/20 hover:-translate-y-1">
+            <div className="p-3 rounded-full bg-white/5 text-accent-primary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(242,254,119,0.1)]">
+                <Icon size={18} />
+            </div>
+            <div className="overflow-hidden">
+                <p className="text-[9px] text-text-secondary mb-1 font-black uppercase tracking-widest opacity-40 italic">{label}</p>
+                <p className="text-base font-bold text-white group-hover:text-accent-primary transition-colors truncate">{value}</p>
+            </div>
+        </a>
+    );
+};
 
 const Contact = () => {
+    const { data: meData } = useMeData();
+
     return (
         <div className="container min-h-screen py-48 md:py-64 flex flex-col justify-center">
             <div className="max-w-4xl mx-auto w-full">
@@ -36,12 +42,12 @@ const Contact = () => {
 
                 {/* Contact Methods - Compact Grid */}
                 <div className="grid md:grid-cols-2 gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                    <ContactItem icon={Phone} label="Call me" value="+84 348 669 124" href="tel:+84348669124" />
-                    <ContactItem icon={Mail} label="Email me" value="contact@phatdo.com" href="mailto:contact@phatdo.com" />
-                    <ContactItem icon={Facebook} label="Facebook" value="Đỗ Hữu Phát" href="https://facebook.com/dhphat" />
-                    <ContactItem icon={Instagram} label="Instagram" value="@phatdo.hp" href="https://instagram.com/phatdo.hp" />
-                    <ContactItem icon={Zap} label="Threads" value="@phatdo.hp" href="https://threads.net/@phatdo.hp" />
-                    <ContactItem icon={Zap} label="TikTok" value="@phatdo.hp" href="https://tiktok.com/@phatdo.hp" />
+                    <ContactItem icon={Phone} label="Số điện thoại" value={meData?.phone} href={`tel:${meData?.phone?.replace(/\s/g, '')}`} />
+                    <ContactItem icon={Mail} label="Email" value={meData?.email} href={`mailto:${meData?.email}`} />
+                    <ContactItem icon={Facebook} label="Facebook" value="Đỗ Hữu Phát" href={meData?.facebook} />
+                    <ContactItem icon={Instagram} label="Instagram" value="@phatdo.hp" href={meData?.instagram} />
+                    <ContactItem icon={Zap} label="Threads" value="@phatdo.hp" href={meData?.threads} />
+                    <ContactItem icon={Zap} label="TikTok" value="@phatdo.hp" href={meData?.tiktok} />
                 </div>
             </div>
         </div>

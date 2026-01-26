@@ -4,7 +4,7 @@ import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
 import { meData as staticMeData } from '../data/content';
 
-const TimelineItem = ({ title, place, period, description, index }) => (
+const TimelineItem = ({ title, place, period, description, index, link }) => (
     <div className="relative pl-8 pb-12 border-l border-white/10 last:pb-0 group" style={{ animationDelay: `${index * 0.1}s` }}>
         <div className="absolute left-[-21px] top-1.5 w-10 aspect-square rounded-full glass-panel flex items-center justify-center text-accent-primary group-hover:border-accent-primary/50 transition-all duration-500 text-[10px] font-black italic bg-bg-primary">
             {index + 1}
@@ -15,19 +15,29 @@ const TimelineItem = ({ title, place, period, description, index }) => (
             <span>•</span>
             <span>{period}</span>
         </div>
-        <p className="text-sm text-text-secondary leading-loose font-light">{description}</p>
+        <p className="text-sm text-text-secondary leading-loose font-light mb-4">{description}</p>
+        {link && (
+            <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-accent-primary hover:text-white transition-colors group/link p-2 bg-white/5 rounded-lg border border-white/5 hover:border-accent-primary/30">
+                <Link size={10} className="group-hover/link:rotate-12 transition-transform" /> xem tham chiếu
+            </a>
+        )}
     </div>
 );
 
-const AwardItem = ({ title, place, period, description }) => (
+const AwardItem = ({ title, place, period, description, link }) => (
     <div className="glass-panel p-6 rounded-3xl border border-white/5 hover:border-accent-primary/20 transition-all duration-500 group flex items-start gap-5">
         <div className="p-3 rounded-2xl bg-white/5 text-accent-secondary group-hover:bg-accent-secondary group-hover:text-bg-primary transition-all duration-500">
             <Award size={24} />
         </div>
-        <div>
+        <div className="flex-grow">
             <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
             <p className="text-[10px] text-accent-primary font-black uppercase tracking-widest opacity-60 mb-2">{place} • {period}</p>
-            <p className="text-xs text-text-secondary font-light leading-relaxed">{description}</p>
+            <p className="text-xs text-text-secondary font-light leading-relaxed mb-4">{description}</p>
+            {link && (
+                <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-accent-secondary hover:text-white transition-colors p-2 bg-white/5 rounded-lg border border-white/5">
+                    <Link size={10} /> tham chiếu
+                </a>
+            )}
         </div>
     </div>
 );
@@ -97,43 +107,44 @@ const Me = () => {
                 <section className="mt-32 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
                     <h2 className="text-2xl font-black mb-12 text-white uppercase italic tracking-widest text-[13px] opacity-40">đã từng ghé qua</h2>
 
-                    <div className="grid lg:grid-cols-2 gap-8">
-                        <div className="glass-panel p-8 rounded-3xl border border-white/5">
-                            <div className="flex items-center gap-3 mb-6">
-                                <Globe className="text-accent-primary opacity-50" size={20} />
-                                <h3 className="text-lg font-bold">THẾ GIỚI</h3>
-                            </div>
-                            <div className="aspect-[2/1] bg-white/[0.02] rounded-2xl flex items-center justify-center border border-white/5 mb-6 relative overflow-hidden group">
-                                <div className="flex gap-1.5 flex-wrap justify-center p-6">
-                                    {meData.travel?.countries?.map(c => (
-                                        <span key={c} className="px-2 py-0.5 bg-accent-primary/10 text-accent-primary rounded-lg text-[9px] font-black border border-accent-primary/10 uppercase tracking-tighter">{c}</span>
-                                    ))}
+                    <div className="flex flex-wrap gap-3">
+                        {meData.places?.map((place, idx) => (
+                            <a
+                                key={idx}
+                                href={place.link || '#'}
+                                target={place.link ? "_blank" : undefined}
+                                rel={place.link ? "noopener noreferrer" : undefined}
+                                className={`
+                                    group relative overflow-hidden px-5 py-3 rounded-2xl border transition-all duration-500
+                                    ${place.type === 'intl'
+                                        ? 'bg-accent-primary/20 border-accent-primary/30 text-accent-primary hover:bg-accent-primary hover:text-bg-primary hover:border-accent-primary scale-110'
+                                        : 'bg-white/5 border-white/5 text-text-secondary hover:text-white hover:border-white/20'
+                                    }
+                                    ${place.link ? 'cursor-pointer' : 'cursor-default'}
+                                `}
+                            >
+                                <div className="flex items-center gap-3">
+                                    {place.type === 'intl' ? <Globe size={14} className="opacity-70" /> : <MapPin size={12} className="opacity-40" />}
+                                    <span className={`text-[11px] font-black uppercase tracking-widest ${place.type === 'intl' ? 'tracking-[0.2em]' : ''}`}>
+                                        {place.name}
+                                    </span>
                                 </div>
-                            </div>
-                            <p className="text-[11px] text-text-secondary font-bold uppercase opacity-30 italic">
-                                {meData.travel?.countries?.length || 0} {meData.travel?.countries?.length === 1 ? 'country' : 'countries'} explored
-                            </p>
-                        </div>
+                                {place.link && (
+                                    <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-60 transition-opacity">
+                                        <Zap size={8} fill="currentColor" />
+                                    </div>
+                                )}
+                            </a>
+                        ))}
+                    </div>
 
-                        <div className="glass-panel p-8 rounded-3xl border border-white/5">
-                            <div className="flex items-center gap-3 mb-6">
-                                <MapPin className="text-accent-secondary opacity-50" size={20} />
-                                <h3 className="text-lg font-bold">VIỆT NAM</h3>
-                            </div>
-                            <div className="aspect-[2/1] bg-white/[0.02] rounded-2xl flex items-center justify-center border border-white/5 mb-6 relative overflow-hidden group">
-                                <div className="flex gap-1.5 flex-wrap justify-center p-6 text-[9px]">
-                                    {meData.travel?.provinces?.slice(0, 8).map(p => (
-                                        <span key={p} className="px-2 py-0.5 bg-white/5 text-text-primary rounded-lg font-bold border border-white/5">{p}</span>
-                                    ))}
-                                    {(meData.travel?.provinces?.length > 8) && (
-                                        <span className="px-2 py-0.5 bg-accent-secondary/10 text-accent-secondary rounded-lg font-bold">+{meData.travel.provinces.length - 8}</span>
-                                    )}
-                                </div>
-                            </div>
-                            <p className="text-[11px] text-text-secondary font-bold uppercase opacity-30 italic">
-                                {meData.travel?.provinces?.length || 0} {meData.travel?.provinces?.length === 1 ? 'province' : 'provinces'} visited
-                            </p>
-                        </div>
+                    <div className="mt-12 flex items-center gap-8 opacity-40">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
+                            <span className="w-3 h-3 rounded bg-accent-primary"></span> Quốc tế
+                        </p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
+                            <span className="w-3 h-3 rounded bg-white/20"></span> Trong nước
+                        </p>
                     </div>
                 </section>
             </div>

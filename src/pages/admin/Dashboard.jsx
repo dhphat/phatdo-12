@@ -128,27 +128,42 @@ const LinkEditor = ({ links = [], onChange, label }) => {
     );
 };
 
-const TravelListEditor = ({ items = [], onChange, label, placeholder }) => {
-    const addItem = () => onChange([...items, '']);
+const PlacesListEditor = ({ items = [], onChange, label }) => {
+    const addItem = () => onChange([...items, { name: '', type: 'dom', link: '' }]);
     const removeItem = (idx) => onChange(items.filter((_, i) => i !== idx));
-    const updateItem = (idx, value) => {
+    const updateItem = (idx, field, value) => {
         const newItems = [...items];
-        newItems[idx] = value;
+        newItems[idx] = { ...newItems[idx], [field]: value };
         onChange(newItems);
     };
 
     return (
         <div className="space-y-4">
             <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{label}</label>
-            <div className="space-y-2">
+            <div className="space-y-3">
                 {items.map((item, idx) => (
-                    <div key={idx} className="flex gap-2">
+                    <div key={idx} className="flex flex-col md:flex-row gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5">
                         <input
                             type="text"
-                            placeholder={placeholder}
-                            value={item}
-                            onChange={(e) => updateItem(idx, e.target.value)}
+                            placeholder="Tên địa điểm"
+                            value={item.name}
+                            onChange={(e) => updateItem(idx, 'name', e.target.value)}
                             className="flex-grow bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:outline-none focus:border-accent-primary/30 transition-all font-bold"
+                        />
+                        <select
+                            value={item.type}
+                            onChange={(e) => updateItem(idx, 'type', e.target.value)}
+                            className="bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:outline-none focus:border-accent-primary/30 transition-all font-bold"
+                        >
+                            <option value="dom" className="bg-[#0A192F]">Trong nước</option>
+                            <option value="intl" className="bg-[#0A192F]">Quốc tế</option>
+                        </select>
+                        <input
+                            type="text"
+                            placeholder="Link (Ảnh/Chia sẻ)"
+                            value={item.link}
+                            onChange={(e) => updateItem(idx, 'link', e.target.value)}
+                            className="flex-grow bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:outline-none focus:border-accent-primary/30 transition-all font-sans"
                         />
                         <button
                             type="button"
@@ -164,7 +179,7 @@ const TravelListEditor = ({ items = [], onChange, label, placeholder }) => {
                     onClick={addItem}
                     className="w-full py-3 rounded-xl border border-dashed border-white/10 text-[9px] font-black uppercase tracking-widest text-text-secondary hover:border-accent-primary/50 hover:text-accent-primary transition-all flex items-center justify-center gap-2"
                 >
-                    <Plus size={12} /> Thêm {label.toLowerCase()}
+                    <Plus size={12} /> Thêm địa điểm mới
                 </button>
             </div>
         </div>
@@ -187,7 +202,13 @@ const ProfileEditor = () => {
         chillSubtitle: 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
         ogImage: '',
         siteTitle: '',
-        faviconUrl: ''
+        faviconUrl: '',
+        phone: '',
+        email: '',
+        facebook: '',
+        instagram: '',
+        threads: '',
+        tiktok: ''
     });
     const [saving, setSaving] = useState(false);
 
@@ -207,7 +228,13 @@ const ProfileEditor = () => {
                 chillSubtitle: remoteData.chillSubtitle || 'nơi mình lưu giữ những giá trị sáng tạo và những con người đã đồng hành cùng mình.',
                 ogImage: remoteData.ogImage || '',
                 siteTitle: remoteData.siteTitle || '',
-                faviconUrl: remoteData.faviconUrl || ''
+                faviconUrl: remoteData.faviconUrl || '',
+                phone: remoteData.phone || '',
+                email: remoteData.email || '',
+                facebook: remoteData.facebook || '',
+                instagram: remoteData.instagram || '',
+                threads: remoteData.threads || '',
+                tiktok: remoteData.tiktok || ''
             });
         }
     }, [remoteData]);
@@ -247,12 +274,12 @@ const ProfileEditor = () => {
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Tiêu đề chính (Dòng 1+2+3)</label>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Tiêu đề chính (Sử dụng * để highlight màu)</label>
                                 <textarea
                                     value={meData.homeText1}
                                     onChange={(e) => setMeData({ ...meData, homeText1: e.target.value })}
                                     className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30"
-                                    placeholder="expert creative guidance."
+                                    placeholder="expert *creative* guidance."
                                 />
                             </div>
                             <div className="space-y-2">
@@ -306,7 +333,7 @@ const ProfileEditor = () => {
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="space-y-6">
                             <p className="text-[10px] text-text-secondary leading-relaxed opacity-60">
-                                Hình ảnh này sẽ hiển thị khi bạn chia sẻ link website lên Facebook, Zalo, iMessage... Nên dùng ảnh có tỉ lệ 1200x630px để hiển thị đẹp nhất.
+                                Hình ảnh này sẽ hiển thị khi bạn chia sẻ link website lên Facebook, Zalo, iMessage...
                             </p>
                             <ImageUpload
                                 label="Ảnh Thumbnail Website (OG Image)"
@@ -330,6 +357,36 @@ const ProfileEditor = () => {
                                 currentImage={meData.faviconUrl}
                                 onUpload={(url) => setMeData({ ...meData, faviconUrl: url })}
                             />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="pt-10 border-t border-white/5 space-y-8">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white italic">Thông tin Liên hệ (Contact)</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Số điện thoại</label>
+                            <input type="text" value={meData.phone} onChange={e => setMeData({ ...meData, phone: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" placeholder="+84 348 669 124" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Email</label>
+                            <input type="email" value={meData.email} onChange={e => setMeData({ ...meData, email: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" placeholder="contact@phatdo.com" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Facebook URL</label>
+                            <input type="text" value={meData.facebook} onChange={e => setMeData({ ...meData, facebook: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Instagram URL</label>
+                            <input type="text" value={meData.instagram} onChange={e => setMeData({ ...meData, instagram: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Threads URL</label>
+                            <input type="text" value={meData.threads} onChange={e => setMeData({ ...meData, threads: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">TikTok URL</label>
+                            <input type="text" value={meData.tiktok} onChange={e => setMeData({ ...meData, tiktok: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-xl p-3 text-xs" />
                         </div>
                     </div>
                 </div>
@@ -382,7 +439,7 @@ const BiographyEditor = () => {
         education: [],
         experience: [],
         awards: [],
-        travel: { countries: [], provinces: [] }
+        places: []
     });
     const [saving, setSaving] = useState(false);
 
@@ -394,7 +451,7 @@ const BiographyEditor = () => {
                 education: remoteData.education || [],
                 experience: remoteData.experience || [],
                 awards: remoteData.awards || [],
-                travel: remoteData.travel || { countries: [], provinces: [] }
+                places: remoteData.places || []
             });
         }
     }, [remoteData]);
@@ -432,9 +489,9 @@ const BiographyEditor = () => {
     if (loading) return <div className="text-center py-20 opacity-40 italic">Đang tải...</div>;
 
     const sections = [
-        { key: 'education', label: 'Học vấn', template: { title: '', place: '', period: '', description: '' } },
-        { key: 'experience', label: 'Kinh nghiệm', template: { title: '', place: '', period: '', description: '' } },
-        { key: 'awards', label: 'Thành tích', template: { title: '', place: '', period: '', description: '' } }
+        { key: 'education', label: 'Học vấn', template: { title: '', place: '', period: '', description: '', link: '' } },
+        { key: 'experience', label: 'Kinh nghiệm', template: { title: '', place: '', period: '', description: '', link: '' } },
+        { key: 'awards', label: 'Thành tích', template: { title: '', place: '', period: '', description: '', link: '' } }
     ];
 
     return (
@@ -457,6 +514,7 @@ const BiographyEditor = () => {
                                     <input type="text" placeholder="Tiêu đề (VD: Cử nhân)" value={item.title} onChange={e => updateItem(section.key, idx, 'title', e.target.value)} className="bg-transparent border-b border-white/10 py-2 text-sm text-white focus:outline-none focus:border-accent-primary/50" />
                                     <input type="text" placeholder="Nơi học/làm (VD: Đại học FPT)" value={item.place} onChange={e => updateItem(section.key, idx, 'place', e.target.value)} className="bg-transparent border-b border-white/10 py-2 text-sm text-white focus:outline-none focus:border-accent-primary/50" />
                                     <input type="text" placeholder="Thời gian (VD: 2016 - 2020)" value={item.period} onChange={e => updateItem(section.key, idx, 'period', e.target.value)} className="bg-transparent border-b border-white/10 py-2 text-sm text-white focus:outline-none focus:border-accent-primary/50" />
+                                    <input type="text" placeholder="Link tham chiếu (URL)" value={item.link} onChange={e => updateItem(section.key, idx, 'link', e.target.value)} className="bg-transparent border-b border-white/10 py-2 text-sm text-white focus:outline-none focus:border-accent-primary/50 font-sans" />
                                 </div>
                                 <textarea placeholder="Mô tả..." value={item.description} onChange={e => updateItem(section.key, idx, 'description', e.target.value)} className="w-full bg-transparent border-b border-white/10 py-2 text-sm text-text-secondary focus:outline-none focus:border-accent-primary/50 font-light h-16 resize-none" />
                             </div>
@@ -467,22 +525,13 @@ const BiographyEditor = () => {
 
             <div className="space-y-6">
                 <div className="flex items-center border-b border-white/5 pb-4">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-primary">Du lịch (Travel)</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-primary">Những nơi đã từng ghé qua (Places)</label>
                 </div>
-                <div className="grid md:grid-cols-2 gap-8">
-                    <TravelListEditor
-                        label="Quốc gia (Countries)"
-                        items={meData.travel.countries}
-                        onChange={(newItems) => setMeData({ ...meData, travel: { ...meData.travel, countries: newItems } })}
-                        placeholder="VD: Vietnam"
-                    />
-                    <TravelListEditor
-                        label="Tỉnh thành (Provinces)"
-                        items={meData.travel.provinces}
-                        onChange={(newItems) => setMeData({ ...meData, travel: { ...meData.travel, provinces: newItems } })}
-                        placeholder="VD: TP. HCM"
-                    />
-                </div>
+                <PlacesListEditor
+                    label="Danh sách địa điểm"
+                    items={meData.places}
+                    onChange={(newItems) => setMeData({ ...meData, places: newItems })}
+                />
             </div>
 
             <button type="submit" disabled={saving} className="w-full btn-pill py-4 flex items-center justify-center gap-3 bg-white text-bg-primary font-black uppercase tracking-widest hover:bg-accent-primary transition-all">
@@ -668,12 +717,10 @@ const MediaEditor = () => {
                         <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">Tiêu đề / Tên</label>
                         <input type="text" value={editing.title || editing.organization || ''} onChange={e => setEditing(subTab === 'crew' ? { ...editing, organization: e.target.value } : { ...editing, title: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" required />
                     </div>
-                    {(subTab === 'photos' || subTab === 'clips' || subTab === 'crew') && (
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{subTab === 'photos' ? 'Loại (Type)' : 'Vai trò (Role)'}</label>
-                            <input type="text" value={editing.type || editing.role || ''} onChange={e => setEditing(subTab === 'photos' ? { ...editing, type: e.target.value } : { ...editing, role: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
-                        </div>
-                    )}
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-accent-primary opacity-60">{subTab === 'photos' ? 'Loại (Type)' : 'Vai trò (Role)'}</label>
+                        <input type="text" value={editing.type || editing.role || ''} onChange={e => setEditing(subTab === 'photos' ? { ...editing, type: e.target.value } : { ...editing, role: e.target.value })} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-accent-primary/30" />
+                    </div>
                     {(subTab === 'photos' || subTab === 'crew') && (
                         <div className="space-y-2">
                             <ImageUpload
@@ -698,7 +745,7 @@ const MediaEditor = () => {
                     )}
                     <div className="pt-4 border-t border-white/5">
                         <LinkEditor
-                            label="Các đường dẫn liên quan (Facebook, Tag người đồng hành...)"
+                            label="Các đường dẫn liên quan"
                             links={editing.otherLinks}
                             onChange={(newLinks) => setEditing({ ...editing, otherLinks: newLinks })}
                         />
@@ -761,14 +808,7 @@ const AdminDashboard = () => {
     };
 
     useEffect(() => {
-        console.log("AdminDashboard mounted. Auth State:", {
-            isLoading: loadingAuth,
-            hasUser: !!user,
-            hasAuthCurrentUser: !!auth.currentUser
-        });
-
         if (!loadingAuth && !user && !auth.currentUser) {
-            console.log("Redirecting to login...");
             navigate('/admin/login');
         }
     }, [user, loadingAuth, navigate]);
@@ -788,7 +828,7 @@ const AdminDashboard = () => {
     }
 
     if (!user && !auth.currentUser) {
-        return null; // Will be handled by useEffect redirect
+        return null;
     }
 
     return (
