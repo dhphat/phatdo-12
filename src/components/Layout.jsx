@@ -9,9 +9,9 @@ const Layout = ({ children }) => {
     const isAdminPage = location.pathname.startsWith('/admin');
 
     return (
-        <div className="flex flex-col min-h-screen bg-bg-primary text-text-primary selection:bg-accent-primary selection:text-bg-primary relative overflow-hidden">
-            <StarsBackground />
-            <CustomCursor />
+        <div className={`flex flex-col min-h-screen bg-bg-primary text-text-primary selection:bg-accent-primary selection:text-bg-primary relative overflow-hidden ${isAdminPage ? 'cursor-auto' : ''}`}>
+            {!isAdminPage && <StarsBackground />}
+            {!isAdminPage && <CustomCursor />}
             {!isAdminPage && <Navbar />}
             <main className="flex-grow">
                 {children}

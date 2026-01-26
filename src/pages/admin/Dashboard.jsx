@@ -488,9 +488,9 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="flex min-h-screen bg-bg-primary/40 backdrop-blur-md relative z-[100]">
+        <div className="flex min-h-screen bg-[#020617] text-white cursor-auto relative">
             {/* Sidebar */}
-            <aside className="w-64 border-r border-white/5 bg-bg-primary/90 flex flex-col sticky top-0 h-screen">
+            <aside className="w-64 border-r border-white/5 bg-[#010410] flex flex-col sticky top-0 h-screen">
                 <div className="p-8 mb-4">
                     <h1 className="text-xl font-black text-white tracking-widest uppercase">Aura CMS</h1>
                     <p className="text-[10px] text-accent-primary font-bold tracking-[0.2em] opacity-50 mt-1 italic">phatdo.com</p>

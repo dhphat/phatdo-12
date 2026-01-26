@@ -21,8 +21,8 @@ const AdminLogin = () => {
 
     if (loadingAuth) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-bg-primary/95 backdrop-blur-xl z-[100] fixed inset-0">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-primary border-r-2 border-r-transparent"></div>
+            <div className="fixed inset-0 min-h-screen flex items-center justify-center bg-[#020617] z-[9999]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-primary"></div>
             </div>
         );
     }
@@ -43,8 +43,8 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-6 relative">
-            <div className="max-w-md w-full glass-panel p-10 rounded-[2.5rem] relative z-10 border-white/5 shadow-2xl">
+        <div className="min-h-screen flex items-center justify-center p-6 bg-[#020617] cursor-auto relative">
+            <div className="max-w-md w-full bg-[#0A192F] border border-white/5 p-10 rounded-[2.5rem] relative z-10 shadow-2xl">
                 <div className="flex flex-col items-center mb-10 text-center">
                     <div className="w-12 h-12 rounded-2xl bg-accent-primary/10 flex items-center justify-center text-accent-primary mb-6">
                         <Star size={24} fill="currentColor" />
@@ -62,7 +62,7 @@ const AdminLogin = () => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-accent-primary/30 focus:bg-white/[0.08] transition-all"
+                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-accent-primary/30 focus:bg-white/[0.08] transition-all font-sans"
                                 placeholder="name@example.com"
                                 required
                             />
@@ -77,7 +77,7 @@ const AdminLogin = () => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-accent-primary/30 focus:bg-white/[0.08] transition-all"
+                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-accent-primary/30 focus:bg-white/[0.08] transition-all font-sans"
                                 placeholder="••••••••"
                                 required
                             />
