@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm, Star, Sparkles, Smile } from 'lucide-react';
+import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm, Star, Sparkles, Smile, Heart, Infinity, Moon, Coffee, Fingerprint, Trophy } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
 // Keeping static data as fallback if needed, but we will prefer Firebase data
 import { meData as staticMeData } from '../data/content';
@@ -61,7 +61,7 @@ const Me = () => {
     }, [meData.places]);
 
     const HeadlineIcon = useMemo(() => {
-        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy];
         return icons[Math.floor(Math.random() * icons.length)];
     }, []);
 
@@ -82,7 +82,7 @@ const Me = () => {
                     <h1 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter text-white">
                         {meData.meTitle || "về mình."}
                     </h1>
-                    <p className="text-sm md:text-base text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto italic opacity-50 lowercase">
+                    <p className="text-sm md:text-base text-text-secondary max-w-2xl font-light leading-relaxed animate-fade-in-up mx-auto italic opacity-70 lowercase">
                         {meData.meSubtitle || "ngôi nhà nơi mình chia sẻ những cảm xúc và tư duy về nghề sáng tạo."}
                     </p>
                 </header>

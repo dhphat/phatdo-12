@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { ArrowRight, Star, Zap, Sparkles, Smile, Compass, MapPin } from 'lucide-react';
+import { ArrowRight, Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMeData } from '../hooks/useContent';
 
@@ -17,7 +17,7 @@ const Home = () => {
     }, [roles.length]);
 
     const HeadlineIcon = useMemo(() => {
-        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy];
         return icons[Math.floor(Math.random() * icons.length)];
     }, []);
 
@@ -76,7 +76,7 @@ const Home = () => {
                         )}
                     </h1>
 
-                    <p className="text-sm md:text-base text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase italic opacity-50" style={{ animationDelay: '0.1s' }}>
+                    <p className="text-sm md:text-base text-text-secondary max-w-sm mb-12 leading-relaxed animate-fade-in-up font-light lowercase italic opacity-70" style={{ animationDelay: '0.1s' }}>
                         {meData?.homeSubtitle?.includes('chill with...') ? (
                             <>
                                 {meData.homeSubtitle.split('chill with...')[0]}

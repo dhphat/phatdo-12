@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Briefcase, Image as ImageIcon, Video, Users, ExternalLink, Play, ArrowRight, Star, Zap, Sparkles, Smile, Compass, MapPin } from 'lucide-react';
+import { Briefcase, Image as ImageIcon, Video, Users, ExternalLink, Play, ArrowRight, Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy } from 'lucide-react';
 import { useMeData, useCollection } from '../hooks/useContent';
 import { projects as staticProjects, photos as staticPhotos, clips as staticClips, crew as staticCrew } from '../data/content';
 
@@ -16,7 +16,7 @@ const PageHeader = ({ title, subtitle, headline, headlineIcon: HeadlineIcon }) =
             </div>
         )}
         <h1 className="text-5xl md:text-8xl font-black mb-6 md:mb-8 text-white tracking-tighter lowercase leading-tight">{title}</h1>
-        <p className="text-sm md:text-base text-text-secondary max-w-3xl font-light leading-relaxed mx-auto italic opacity-50 lowercase">{subtitle}</p>
+        <p className="text-sm md:text-base text-text-secondary max-w-3xl font-light leading-relaxed mx-auto italic opacity-70 lowercase">{subtitle}</p>
     </div>
 );
 
@@ -155,7 +155,7 @@ const ChillWith = () => {
     const { data: remoteMeData } = useMeData();
 
     const HeadlineIcon = useMemo(() => {
-        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy];
         return icons[Math.floor(Math.random() * icons.length)];
     }, []);
 

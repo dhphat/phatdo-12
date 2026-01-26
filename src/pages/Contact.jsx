@@ -33,7 +33,7 @@ const Contact = () => {
     const { data: meData } = useMeData();
 
     const HeadlineIcon = useMemo(() => {
-        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin];
+        const icons = [Star, Zap, Sparkles, Smile, Compass, MapPin, Heart, Infinity, Moon, Sun, Wind, Mountain, Coffee, Fingerprint, Trophy];
         return icons[Math.floor(Math.random() * icons.length)];
     }, []);
 
@@ -42,7 +42,7 @@ const Contact = () => {
             <div className="max-w-4xl mx-auto w-full">
                 {/* Header */}
                 <div className="mb-24 animate-fade-in-up text-center">
-                    <div className="flex items-center justify-center gap-2 mb-8 mx-auto opacity-50">
+                    <div className="flex items-center justify-center gap-2 mb-8 mx-auto">
                         <div className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-accent-primary">
                             <HeadlineIcon size={12} fill="currentColor" />
                         </div>
@@ -54,7 +54,7 @@ const Contact = () => {
                     <h1 className="text-6xl md:text-8xl font-black mb-10 leading-tight tracking-tighter text-white lowercase">
                         nhau nha.
                     </h1>
-                    <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto italic opacity-50 lowercase transition-all">
+                    <p className="text-sm md:text-base text-text-secondary leading-relaxed font-light max-w-lg mx-auto italic opacity-70 lowercase transition-all">
                         {meData?.contactSubtitle || "mình luôn sẵn sàng cho những dự án mới, những ý tưởng điên rồ hoặc đơn giản là một buổi cà phê chia sẻ."}
                     </p>
                 </div>
