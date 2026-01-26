@@ -23,7 +23,8 @@
 
   body {
     font-family: var(--font-sans);
-    @apply bg-bg-primary text-text-primary antialiased min-h-screen leading-relaxed p-0 cursor-none selection:bg-accent-primary selection:text-bg-primary;
+    @apply bg-bg-primary text-text-primary antialiased min-h-screen leading-relaxed p-0 selection:bg-accent-primary selection:text-bg-primary;
+    cursor: none !important;
 
     /* Flashlight effect targeting cyan/blue */
     background-image:
@@ -34,6 +35,15 @@
     background-attachment: fixed;
     background-position: center;
     transition: background 0.1s ease-out;
+  }
+
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"] {
+    cursor: none !important;
   }
 
   h1,
