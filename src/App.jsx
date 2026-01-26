@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -12,7 +12,19 @@ import { useMeData } from './hooks/useContent';
 import './App.css';
 
 function App() {
-  const { data: meData, loading } = useMeData();
+  const { data: meData, loading: dataLoading } = useMeData();
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!dataLoading && meData?.heroImage) {
+      const img = new Image();
+      img.src = meData.heroImage;
+      img.onload = () => setImageLoaded(true);
+      img.onerror = () => setImageLoaded(true); // Don't block forever if image fails
+    } else if (!dataLoading && !meData?.heroImage) {
+      setImageLoaded(true); // No image to load
+    }
+  }, [dataLoading, meData?.heroImage]);
 
   useEffect(() => {
     if (meData?.siteTitle) {
@@ -26,7 +38,9 @@ function App() {
     }
   }, [meData]);
 
-  if (loading) return <LoadingScreen />;
+  const isEverythingReady = !dataLoading && imageLoaded;
+
+  if (!isEverythingReady) return <LoadingScreen />;
 
   return (
     <Router>

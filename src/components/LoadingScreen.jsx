@@ -16,8 +16,8 @@ const LoadingScreen = () => {
 
             {/* Minimalist Text */}
             <div className="mt-12 text-center">
-                <p className="text-[10px] font-black uppercase tracking-[0.5em] text-accent-primary opacity-40 animate-pulse">
-                    synchronizing creative space
+                <p className="text-[11px] font-black tracking-[0.3em] text-accent-primary opacity-60 animate-pulse lowercase italic">
+                    phát ơi khách tới nhà kìa
                 </p>
             </div>
 
