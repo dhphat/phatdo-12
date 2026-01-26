@@ -7,11 +7,14 @@ import ChillWith from './pages/ChillWith';
 import Contact from './pages/Contact';
 import AdminLogin from './pages/admin/Login';
 import AdminDashboard from './pages/admin/Dashboard';
+import LoadingScreen from './components/LoadingScreen';
 import { useMeData } from './hooks/useContent';
 import './App.css';
 
 function App() {
-  const { data: meData } = useMeData();
+  const { data: meData, loading } = useMeData();
+
+  if (loading) return <LoadingScreen />;
 
   useEffect(() => {
     if (meData?.siteTitle) {

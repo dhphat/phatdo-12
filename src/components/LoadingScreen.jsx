@@ -1,0 +1,32 @@
+import React from 'react';
+import { Star } from 'lucide-react';
+
+const LoadingScreen = () => {
+    return (
+        <div className="fixed inset-0 z-[9999] bg-bg-primary flex flex-col items-center justify-center">
+            <div className="relative">
+                {/* Pulsing Outer Glow */}
+                <div className="absolute inset-0 bg-accent-primary/20 blur-3xl rounded-full animate-pulse-slow scale-150"></div>
+
+                {/* Main Logo/Icon */}
+                <div className="relative glass-panel w-20 h-20 rounded-full flex items-center justify-center border-white/5 shadow-2xl animate-float">
+                    <Star size={32} className="text-accent-primary animate-pulse" fill="currentColor" />
+                </div>
+            </div>
+
+            {/* Minimalist Text */}
+            <div className="mt-12 text-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.5em] text-accent-primary opacity-40 animate-pulse">
+                    synchronizing creative space
+                </p>
+            </div>
+
+            {/* Subtle Progress Bar (Design only) */}
+            <div className="mt-8 w-32 h-[1px] bg-white/5 overflow-hidden">
+                <div className="h-full bg-accent-primary/40 animate-loading-bar origin-left"></div>
+            </div>
+        </div>
+    );
+};
+
+export default LoadingScreen;

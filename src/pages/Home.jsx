@@ -21,7 +21,7 @@ const Home = () => {
         return icons[Math.floor(Math.random() * icons.length)];
     }, []);
 
-    if (loading) return null; // Or a subtle skeleton
+    // Global loading handled by App.jsx
 
     return (
         <div className="min-h-screen flex items-center overflow-hidden">

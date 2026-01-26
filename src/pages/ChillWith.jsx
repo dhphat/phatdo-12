@@ -160,7 +160,7 @@ const ChillWith = () => {
     }, []);
 
     const isLoading = loadingP || loadingPh || loadingC || loadingCr;
-    if (isLoading && !remoteProjects.length) return null;
+    // remoteMeData is handled by App.jsx, collections lazy load 
 
     return (
         <div className="container min-h-screen py-40 md:py-56">

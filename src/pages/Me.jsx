@@ -65,7 +65,7 @@ const Me = () => {
         return icons[Math.floor(Math.random() * icons.length)];
     }, []);
 
-    if (loading && !remoteMeData) return null;
+    // Global loading is handled by App.jsx level synchronization
 
     return (
         <div className="container min-h-screen py-40 md:py-56">
