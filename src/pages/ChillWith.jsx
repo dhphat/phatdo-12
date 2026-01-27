@@ -193,7 +193,7 @@ const ProjectItem = ({ item, onImageClick }) => {
         >
             <div className="flex flex-col lg:flex-row gap-8">
                 <div className="lg:w-1/4">
-                    <div className={`aspect-square rounded-xl overflow-hidden bg-white/5 flex items-center justify-center p-10 border border-white/5 mb-4 group ring-1 ring-white/10 max-w-[100px] lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ${isVisible ? 'grayscale-0 scale-105' : 'grayscale'}`}>
+                    <div className={`aspect-square rounded-xl overflow-hidden bg-white/5 flex items-center justify-center p-6 md:p-10 border border-white/5 mb-4 group ring-1 ring-white/10 max-w-[120px] lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ${isVisible ? 'grayscale-0 scale-105' : 'grayscale'}`}>
                         <img src={item.logo} alt={item.title} className="w-full h-full object-contain transition-transform duration-500" />
                     </div>
                     <div className="space-y-3 text-center lg:text-left">
@@ -283,7 +283,7 @@ const CrewItem = ({ item, onImageClick }) => {
             <div className="flex flex-col lg:flex-row gap-8">
                 {item.logo && (
                     <div className="lg:w-1/4">
-                        <div className={`aspect-square rounded-xl overflow-hidden bg-white/5 flex items-center justify-center p-6 border border-white/5 mb-4 group ring-1 ring-white/10 max-w-[80px] lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ${isVisible ? 'grayscale-0 scale-105' : 'grayscale'}`}>
+                        <div className={`aspect-square rounded-xl overflow-hidden bg-white/5 flex items-center justify-center p-4 md:p-6 border border-white/5 mb-4 group ring-1 ring-white/10 max-w-[100px] lg:max-w-none mx-auto lg:mx-0 transition-all duration-700 ${isVisible ? 'grayscale-0 scale-105' : 'grayscale'}`}>
                             <img src={item.logo} alt={item.organization} className="w-full h-full object-contain" />
                         </div>
                     </div>
