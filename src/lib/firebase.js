@@ -6,12 +6,12 @@ import { getAnalytics } from "firebase/analytics";
 
 // TODO: Replace with your actual firebaseConfig from the Firebase Console
 const firebaseConfig = {
-    apiKey: "AIzaSyD0_mMx4MOEMEiS8kyFAw90BQ7_m8em83c",
-    authDomain: "phatdo-12.firebaseapp.com",
-    projectId: "phatdo-12",
-    storageBucket: "phatdo-12.firebasestorage.app",
-    messagingSenderId: "421675025769",
-    appId: "1:421675025769:web:40b3cedd3a47a7797c29f8"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
