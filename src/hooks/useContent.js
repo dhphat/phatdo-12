@@ -21,36 +21,7 @@ export const useMeData = () => {
                 if (fetchError) throw fetchError;
 
                 if (row) {
-                    // Convert snake_case DB columns to camelCase for compatibility
-                    setData({
-                        headline: row.headline,
-                        roles: row.roles || [],
-                        homeText1: row.home_text1,
-                        homeSubtitle: row.home_subtitle,
-                        homeButtonText: row.home_button_text,
-                        homeButtonLink: row.home_button_link,
-                        heroImage: row.hero_image,
-                        meTitle: row.me_title,
-                        meSubtitle: row.me_subtitle,
-                        chillHeadline: row.chill_headline,
-                        chillTitle: row.chill_title,
-                        chillSubtitle: row.chill_subtitle,
-                        contactHeadline: row.contact_headline,
-                        contactSubtitle: row.contact_subtitle,
-                        ogImage: row.og_image,
-                        siteTitle: row.site_title,
-                        faviconUrl: row.favicon_url,
-                        phone: row.phone,
-                        email: row.email,
-                        facebook: row.facebook,
-                        instagram: row.instagram,
-                        threads: row.threads,
-                        tiktok: row.tiktok,
-                        education: row.education || [],
-                        experience: row.experience || [],
-                        awards: row.awards || [],
-                        places: row.places || []
-                    });
+                    setData(mapConfigRow(row));
                 }
             } catch (err) {
                 console.error("Error fetching meData:", err);
@@ -61,54 +32,6 @@ export const useMeData = () => {
         };
 
         fetchData();
-
-        // Subscribe to realtime changes
-        const channel = supabase
-            .channel('site_config_changes')
-            .on('postgres_changes', {
-                event: '*',
-                schema: 'public',
-                table: 'site_config',
-                filter: 'id=eq.meData'
-            }, (payload) => {
-                const row = payload.new;
-                if (row) {
-                    setData({
-                        headline: row.headline,
-                        roles: row.roles || [],
-                        homeText1: row.home_text1,
-                        homeSubtitle: row.home_subtitle,
-                        homeButtonText: row.home_button_text,
-                        homeButtonLink: row.home_button_link,
-                        heroImage: row.hero_image,
-                        meTitle: row.me_title,
-                        meSubtitle: row.me_subtitle,
-                        chillHeadline: row.chill_headline,
-                        chillTitle: row.chill_title,
-                        chillSubtitle: row.chill_subtitle,
-                        contactHeadline: row.contact_headline,
-                        contactSubtitle: row.contact_subtitle,
-                        ogImage: row.og_image,
-                        siteTitle: row.site_title,
-                        faviconUrl: row.favicon_url,
-                        phone: row.phone,
-                        email: row.email,
-                        facebook: row.facebook,
-                        instagram: row.instagram,
-                        threads: row.threads,
-                        tiktok: row.tiktok,
-                        education: row.education || [],
-                        experience: row.experience || [],
-                        awards: row.awards || [],
-                        places: row.places || []
-                    });
-                }
-            })
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
     }, []);
 
     return { data, loading, error };
@@ -132,7 +55,6 @@ export const useCollection = (collectionName) => {
 
                 if (fetchError) throw fetchError;
 
-                // Convert snake_case to camelCase for compatibility
                 const mapped = (rows || []).map(row => mapRowToItem(collectionName, row));
                 setData(mapped);
             } catch (err) {
@@ -144,34 +66,45 @@ export const useCollection = (collectionName) => {
         };
 
         fetchData();
-
-        // Subscribe to realtime changes
-        const channel = supabase
-            .channel(`${collectionName}_changes`)
-            .on('postgres_changes', {
-                event: '*',
-                schema: 'public',
-                table: collectionName
-            }, async () => {
-                // Re-fetch on any change to keep order consistent
-                const { data: rows } = await supabase
-                    .from(collectionName)
-                    .select('*')
-                    .order('order', { ascending: true });
-
-                if (rows) {
-                    setData(rows.map(row => mapRowToItem(collectionName, row)));
-                }
-            })
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
     }, [collectionName]);
 
     return { data, loading, error };
 };
+
+/**
+ * Map site_config row (snake_case) to frontend data (camelCase)
+ */
+function mapConfigRow(row) {
+    return {
+        headline: row.headline,
+        roles: row.roles || [],
+        homeText1: row.home_text1,
+        homeSubtitle: row.home_subtitle,
+        homeButtonText: row.home_button_text,
+        homeButtonLink: row.home_button_link,
+        heroImage: row.hero_image,
+        meTitle: row.me_title,
+        meSubtitle: row.me_subtitle,
+        chillHeadline: row.chill_headline,
+        chillTitle: row.chill_title,
+        chillSubtitle: row.chill_subtitle,
+        contactHeadline: row.contact_headline,
+        contactSubtitle: row.contact_subtitle,
+        ogImage: row.og_image,
+        siteTitle: row.site_title,
+        faviconUrl: row.favicon_url,
+        phone: row.phone,
+        email: row.email,
+        facebook: row.facebook,
+        instagram: row.instagram,
+        threads: row.threads,
+        tiktok: row.tiktok,
+        education: row.education || [],
+        experience: row.experience || [],
+        awards: row.awards || [],
+        places: row.places || []
+    };
+}
 
 /**
  * Map database row (snake_case) to frontend item (camelCase)
