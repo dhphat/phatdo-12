@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { auth, db, storage } from '../../lib/firebase';
-import { signOut } from 'firebase/auth';
+import { supabase } from '../../lib/supabase';
 import { useNavigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, setDoc, collection, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useMeData, useCollection } from '../../hooks/useContent';
 import { Settings, Image, Layout as LayoutIcon, LogOut, ChevronRight, Plus, Save, Trash2, Upload, Link, Video as VideoIcon, Globe, MapPin, BookOpen, ArrowUp, ArrowDown, ListOrdered } from 'lucide-react';
-
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
     <button
@@ -29,9 +24,15 @@ const ImageUpload = ({ onUpload, onRemove, label, currentImage, multiple = false
         setUploading(true);
         try {
             const urls = await Promise.all(files.map(async (file) => {
-                const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
-                await uploadBytes(storageRef, file);
-                return await getDownloadURL(storageRef);
+                const filePath = `${Date.now()}-${file.name}`;
+                const { error: uploadError } = await supabase.storage
+                    .from('uploads')
+                    .upload(filePath, file);
+                if (uploadError) throw uploadError;
+                const { data: { publicUrl } } = supabase.storage
+                    .from('uploads')
+                    .getPublicUrl(filePath);
+                return publicUrl;
             }));
 
             if (multiple) {
@@ -284,7 +285,36 @@ const ProfileEditor = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await setDoc(doc(db, 'config', 'meData'), meData, { merge: true });
+            const { error: upsertError } = await supabase
+                .from('site_config')
+                .upsert({
+                    id: 'meData',
+                    headline: meData.headline,
+                    roles: meData.roles,
+                    home_text1: meData.homeText1,
+                    home_subtitle: meData.homeSubtitle,
+                    home_button_text: meData.homeButtonText,
+                    home_button_link: meData.homeButtonLink,
+                    hero_image: meData.heroImage,
+                    me_title: meData.meTitle,
+                    me_subtitle: meData.meSubtitle,
+                    chill_headline: meData.chillHeadline,
+                    chill_title: meData.chillTitle,
+                    chill_subtitle: meData.chillSubtitle,
+                    contact_headline: meData.contactHeadline,
+                    contact_subtitle: meData.contactSubtitle,
+                    og_image: meData.ogImage,
+                    site_title: meData.siteTitle,
+                    favicon_url: meData.faviconUrl,
+                    phone: meData.phone,
+                    email: meData.email,
+                    facebook: meData.facebook,
+                    instagram: meData.instagram,
+                    threads: meData.threads,
+                    tiktok: meData.tiktok,
+                    updated_at: new Date().toISOString()
+                });
+            if (upsertError) throw upsertError;
             alert("Đã lưu thành công!");
         } catch (err) {
             console.error("Save error:", err);
@@ -520,7 +550,17 @@ const BiographyEditor = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await setDoc(doc(db, 'config', 'meData'), meData, { merge: true });
+            const { error: upsertError } = await supabase
+                .from('site_config')
+                .upsert({
+                    id: 'meData',
+                    education: meData.education,
+                    experience: meData.experience,
+                    awards: meData.awards,
+                    places: meData.places,
+                    updated_at: new Date().toISOString()
+                });
+            if (upsertError) throw upsertError;
             alert("Đã cập nhật tiểu sử!");
         } catch (err) {
             console.error(err);
@@ -623,16 +663,33 @@ const ProjectsEditor = () => {
     const [editing, setEditing] = useState(null); // null or project object
     const [saving, setSaving] = useState(false);
 
+    const toDbRow = (item) => ({
+        title: item.title,
+        category: item.category,
+        description: item.description,
+        logo: item.logo,
+        website_url: item.websiteUrl,
+        video_url: item.videoUrl,
+        images: item.images || [],
+        other_links: item.otherLinks || [],
+        "order": item.order
+    });
+
     const handleSave = async (e) => {
         e.preventDefault();
         setSaving(true);
         try {
             if (editing.id) {
-                const { id, ...data } = editing;
-                await updateDoc(doc(db, 'projects', id), data);
+                const { error } = await supabase
+                    .from('projects')
+                    .update(toDbRow(editing))
+                    .eq('id', editing.id);
+                if (error) throw error;
             } else {
-                const newProject = { ...editing, order: projects.length };
-                await addDoc(collection(db, 'projects'), newProject);
+                const { error } = await supabase
+                    .from('projects')
+                    .insert({ ...toDbRow(editing), "order": projects.length });
+                if (error) throw error;
             }
             setEditing(null);
             alert("Đã cập nhật dự án!");
@@ -647,7 +704,8 @@ const ProjectsEditor = () => {
     const handleDelete = async (id) => {
         if (window.confirm("Bạn có chắc chắn muốn xóa dự án này?")) {
             try {
-                await deleteDoc(doc(db, 'projects', id));
+                const { error } = await supabase.from('projects').delete().eq('id', id);
+                if (error) throw error;
             } catch (err) {
                 console.error(err);
                 alert("Lỗi khi xóa.");
@@ -663,14 +721,12 @@ const ProjectsEditor = () => {
         try {
             const item1 = items[index];
             const item2 = items[newIndex];
-
-            // Ensure both have order values, use index as fallback
             const order1 = item1.order !== undefined ? item1.order : index;
             const order2 = item2.order !== undefined ? item2.order : newIndex;
 
             await Promise.all([
-                updateDoc(doc(db, 'projects', item1.id), { order: order2 }),
-                updateDoc(doc(db, 'projects', item2.id), { order: order1 })
+                supabase.from('projects').update({ "order": order2 }).eq('id', item1.id),
+                supabase.from('projects').update({ "order": order1 }).eq('id', item2.id)
             ]);
         } catch (err) {
             console.error("Move error:", err);
@@ -683,7 +739,7 @@ const ProjectsEditor = () => {
         if (!window.confirm("Đặt lại thứ tự cho toàn bộ danh sách dự án dựa trên vị trí hiện tại?")) return;
         setSaving(true);
         try {
-            const batch = projects.map((p, idx) => updateDoc(doc(db, 'projects', p.id), { order: idx }));
+            const batch = projects.map((p, idx) => supabase.from('projects').update({ "order": idx }).eq('id', p.id));
             await Promise.all(batch);
             alert("Đã đặt lại thứ tự dự án!");
         } catch (err) {
@@ -805,16 +861,29 @@ const MediaEditor = () => {
     const [editing, setEditing] = useState(null);
     const [saving, setSaving] = useState(false);
 
+    const toDbRow = (item) => {
+        const base = { other_links: item.otherLinks || [], "order": item.order };
+        if (subTab === 'visual') return { ...base, title: item.title, type: item.type, images: item.images || [] };
+        if (subTab === 'clip') return { ...base, title: item.title, role: item.role, description: item.description, video_url: item.videoUrl };
+        if (subTab === 'crew') return { ...base, organization: item.organization, role: item.role, description: item.description, logo: item.logo, images: item.images || [] };
+        return base;
+    };
+
     const handleSave = async (e) => {
         e.preventDefault();
         setSaving(true);
         try {
             if (editing.id) {
-                const { id, ...data } = editing;
-                await updateDoc(doc(db, subTab, id), data);
+                const { error } = await supabase
+                    .from(subTab)
+                    .update(toDbRow(editing))
+                    .eq('id', editing.id);
+                if (error) throw error;
             } else {
-                const newItem = { ...editing, order: items.length };
-                await addDoc(collection(db, subTab), newItem);
+                const { error } = await supabase
+                    .from(subTab)
+                    .insert({ ...toDbRow(editing), "order": items.length });
+                if (error) throw error;
             }
             setEditing(null);
             alert("Đã cập nhật!");
@@ -828,7 +897,7 @@ const MediaEditor = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm("Xóa mục này?")) {
-            await deleteDoc(doc(db, subTab, id));
+            await supabase.from(subTab).delete().eq('id', id);
         }
     };
 
@@ -840,13 +909,12 @@ const MediaEditor = () => {
         try {
             const item1 = items[index];
             const item2 = items[newIndex];
-
             const order1 = item1.order !== undefined ? item1.order : index;
             const order2 = item2.order !== undefined ? item2.order : newIndex;
 
             await Promise.all([
-                updateDoc(doc(db, subTab, item1.id), { order: order2 }),
-                updateDoc(doc(db, subTab, item2.id), { order: order1 })
+                supabase.from(subTab).update({ "order": order2 }).eq('id', item1.id),
+                supabase.from(subTab).update({ "order": order1 }).eq('id', item2.id)
             ]);
         } catch (err) {
             console.error("Move error:", err);
@@ -860,7 +928,7 @@ const MediaEditor = () => {
         if (!window.confirm(`Đặt lại thứ tự cho toàn bộ ${subTab} dựa trên vị trí hiện tại?`)) return;
         setSaving(true);
         try {
-            const batch = items.map((it, idx) => updateDoc(doc(db, subTab, it.id), { order: idx }));
+            const batch = items.map((it, idx) => supabase.from(subTab).update({ "order": idx }).eq('id', it.id));
             await Promise.all(batch);
             alert("Đã đặt lại thứ tự!");
         } catch (err) {
@@ -992,18 +1060,32 @@ const MediaEditor = () => {
 };
 
 const AdminDashboard = () => {
-    const [user, loadingAuth] = useAuthState(auth);
+    const [user, setUser] = useState(null);
+    const [loadingAuth, setLoadingAuth] = useState(true);
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('profile');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const handleLogout = () => {
-        signOut(auth);
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setUser(session?.user ?? null);
+            setLoadingAuth(false);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
         navigate('/admin/login');
     };
 
     useEffect(() => {
-        if (!loadingAuth && !user && !auth.currentUser) {
+        if (!loadingAuth && !user) {
             navigate('/admin/login');
         }
     }, [user, loadingAuth, navigate]);
@@ -1022,7 +1104,7 @@ const AdminDashboard = () => {
         );
     }
 
-    if (!user && !auth.currentUser) {
+    if (!user) {
         return null;
     }
 
