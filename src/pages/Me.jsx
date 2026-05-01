@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { BookOpen, Briefcase, Award, Globe, MapPin, Zap, Link as LinkIcon, Camera, Compass, Map, Sun, Wind, Cloud, Mountain, TreePalm, Star, Sparkles, Smile, Heart, Infinity, Moon, Coffee, Fingerprint, Trophy } from 'lucide-react';
 import { useMeData } from '../hooks/useContent';
-// Keeping static data as fallback if needed, but we will prefer Firebase data
+// Keeping static data as fallback if needed, but we will prefer Supabase data
 import { meData as staticMeData } from '../data/content';
 
 const TimelineItem = ({ title, place, period, description, index, link }) => (
